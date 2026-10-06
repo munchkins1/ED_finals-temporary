@@ -193,8 +193,8 @@ async function bootstrap() {
 }
 
 function configErrorMarkup() {
-  return `<div class="min-h-screen flex items-center justify-center p-6 bg-slate-50">
-    <div class="max-w-lg bg-white border border-amber-200 rounded-xl p-6 shadow-sm text-center">
+  return `<div class="min-h-screen flex items-center justify-center p-6">
+    <div class="max-w-lg glass rounded-xl p-6 text-center">
       <i class="fa-solid fa-triangle-exclamation text-3xl text-amber-500"></i>
       <h1 class="text-lg font-bold mt-3">Supabase is not configured</h1>
       <p class="text-sm text-slate-600 mt-2">
@@ -240,7 +240,7 @@ function renderNav() {
   // Desktop: pill links exactly like the per-role nav designs.
   if (nav) {
     nav.innerHTML = items.map(n =>
-      `<a href="${n.href}" class="nav-btn px-3 py-2 rounded-lg hover:bg-indigo-700 transition flex items-center gap-1.5" data-tab="${n.tab}"><i class="fa-solid ${n.icon}"></i> ${n.label}</a>`
+      `<a href="${n.href}" class="nav-btn px-3 py-2 rounded-lg transition flex items-center gap-1.5" data-tab="${n.tab}"><i class="fa-solid ${n.icon}"></i> ${n.label}</a>`
     ).join('');
   }
 

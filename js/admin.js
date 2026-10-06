@@ -404,7 +404,7 @@ export async function renderAdminOverview() {
   }
 
   const card = (label, val, color) => `
-    <div class="bg-slate-50 rounded-lg border border-slate-200 p-3 text-center">
+    <div class="glass-soft rounded-lg p-3 text-center">
       <div class="text-lg font-bold ${color}">${val}</div>
       <div class="text-[10px] uppercase text-slate-500 font-semibold">${label}</div>
     </div>`;
@@ -586,7 +586,7 @@ function renderAdminRecordsSummary(rows) {
   const counts = { present: 0, late: 0, absent: 0, excused: 0 };
   rows.forEach(r => { counts[r.status] = (counts[r.status] || 0) + 1; });
   const card = (label, val, color) => `
-    <div class="bg-white rounded-xl border border-slate-200 p-4 text-center">
+    <div class="glass rounded-xl p-4 text-center">
       <div class="text-2xl font-bold ${color}">${val}</div>
       <div class="text-xs text-slate-500 uppercase font-semibold">${label}</div>
     </div>`;

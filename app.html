@@ -11,19 +11,145 @@
   <style>
     @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
     .animate-fade-in { animation: fadeIn .25s ease-out; }
-    .nav-btn.is-active { background-color: #4338ca; color: #fff; font-weight: 700; }
-    #mobile-nav .nav-btn.is-active { color: #4f46e5; background-color: #eef2ff; }
+    @keyframes floatY { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    @keyframes shineSweep {
+      0% { transform: translateX(-130%) skewX(-18deg); opacity: 0; }
+      20% { opacity: 1; }
+      55% { transform: translateX(130%) skewX(-18deg); opacity: 1; }
+      100% { transform: translateX(130%) skewX(-18deg); opacity: 0; }
+    }
+    @keyframes pulseGlow {
+      0%,100% { box-shadow: 0 0 18px rgba(99,102,241,.55), 0 0 45px rgba(59,130,246,.30); }
+      50% { box-shadow: 0 0 26px rgba(99,102,241,.75), 0 0 60px rgba(59,130,246,.45); }
+    }
+    .qr-logo {
+      position: relative;
+      overflow: hidden;
+      animation: floatY 4s ease-in-out infinite, pulseGlow 3.2s ease-in-out infinite;
+    }
+    .qr-logo::after {
+      content: "";
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 45%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent);
+      animation: shineSweep 2.8s ease-in-out infinite;
+    }
+    /* ---- Unified glassmorphism theme (matches landing page) ---- */
+    .glass {
+      background: rgba(255,255,255,.88);
+      -webkit-backdrop-filter: blur(18px);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(255,255,255,.55);
+      box-shadow: 0 18px 45px rgba(0,0,0,.35);
+    }
+    .glass-soft {
+      background: rgba(255,255,255,.55);
+      -webkit-backdrop-filter: blur(14px);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,.45);
+    }
+    .glass-dark {
+      background: rgba(15,15,60,.55);
+      -webkit-backdrop-filter: blur(18px);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(255,255,255,.18);
+      box-shadow: 0 18px 45px rgba(0,0,0,.35);
+    }
+    /* Smooth responsive hover feedback on every interactive button */
+    button, .btn-lift, a.nav-btn, select:not([disabled]) {
+      transition: transform .18s ease, box-shadow .18s ease, background-color .18s ease, filter .18s ease;
+    }
+    button:not([disabled]):hover, .btn-lift:hover, a.nav-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(0,0,0,.35);
+      filter: brightness(1.06);
+    }
+    button:not([disabled]):active, .btn-lift:active, a.nav-btn:active {
+      transform: translateY(0) scale(.98);
+      box-shadow: 0 4px 12px rgba(0,0,0,.3);
+    }
+    button:focus-visible, a.nav-btn:focus-visible {
+      outline: 2px solid rgba(255,255,255,.85);
+      outline-offset: 2px;
+    }
+    .nav-btn.is-active { background-color: rgba(255,255,255,.22); color: #fff; font-weight: 700; }
+    #mobile-nav .nav-btn.is-active { color: #fff; background-color: rgba(255,255,255,.22); }
+    /* ---- Glass conversion for legacy white/slate surfaces (admin/teacher/student) ----
+       All dashboard cards + tables + modals keep their markup; this layer turns
+       every solid white/slate surface into frosted glass. No accent bars exist
+       in this UI (none added here either) per the redesign brief. */
+    #app-main .bg-white,
+    #event-modal .bg-white,
+    #event-view-modal .bg-white,
+    #event-qr-modal .bg-white,
+    #user-modal .bg-white {
+      background: rgba(255,255,255,.88) !important;
+      -webkit-backdrop-filter: blur(18px);
+      backdrop-filter: blur(18px);
+      border-color: rgba(255,255,255,.55) !important;
+      box-shadow: 0 18px 45px rgba(0,0,0,.35);
+      color: #1e293b;
+    }
+    #app-main .bg-slate-50,
+    #event-qr-modal .bg-slate-50,
+    #event-view-modal .bg-slate-50,
+    #app-main [data-roles].bg-white .bg-slate-50 {
+      background: rgba(255,255,255,.5) !important;
+      -webkit-backdrop-filter: blur(14px);
+      backdrop-filter: blur(14px);
+      border-color: rgba(255,255,255,.45) !important;
+      color: #1e293b;
+    }
+    /* Footer + mobile nav float on the gradient, not on white */
+    footer { color: rgba(199,210,254,.75) !important; border-color: rgba(255,255,255,.12) !important; }
+    footer .text-slate-400, footer .text-slate-500 { color: rgba(199,210,254,.75) !important; }
+    #mobile-nav { border-bottom: 1px solid rgba(255,255,255,.14); }
+    #mobile-nav button { color: rgba(224,231,255,.85); }
+    /* Boot / empty-state text on the dark gradient */
+    #app-boot-text { color: rgba(199,210,254,.9) !important; }
+    #app-main thead.bg-slate-100 {
+      background: rgba(255,255,255,.6) !important;
+      color: #334155 !important;
+    }
+    #app-main .hover\:bg-slate-50:hover,
+    #app-main tr.hover\:bg-slate-50:hover {
+      background-color: rgba(255,255,255,.6) !important;
+    }
+    #app-main .divide-slate-200 > :not([hidden]) ~ :not([hidden]),
+    #app-main .divide-y > :not([hidden]) ~ :not([hidden]) {
+      border-color: rgba(255,255,255,.45) !important;
+    }
+    #app-main .border-slate-200 { border-color: rgba(255,255,255,.45) !important; }
+    #app-main .border-slate-100 { border-color: rgba(255,255,255,.4) !important; }
+    #app-main .border-b { border-color: rgba(255,255,255,.45) !important; }
+    /* Keep form controls solid + readable on top of glass */
+    #app-main input, #app-main select, #app-main textarea,
+    #event-modal input, #event-modal select, #event-modal textarea,
+    #user-modal input, #user-modal select, #user-modal textarea,
+    #event-view-modal input {
+      background-color: rgba(255,255,255,.96) !important;
+      color: #1e293b !important;
+      border-color: rgba(148,163,184,.5) !important;
+    }
+    #app-main input::placeholder, #app-main textarea::placeholder { color: #94a3b8; }
+    /* Table text stays dark on glass */
+    #app-main table { color: #1e293b; }
+    #app-main thead th { color: #475569 !important; }
+    /* Stat numbers pop on glass */
+    #tab-dashboard h3 { color: #0f172a; }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+<body class="text-white font-sans antialiased min-h-screen flex flex-col" style="background: radial-gradient(ellipse 80% 60% at 50% 30%, #2b2a8f 0%, #1a1865 45%, #0d0c3d 75%, #070724 100%); background-attachment: fixed;">
 
-  <header id="app-header" style="display: none;" class="bg-indigo-600 text-white shadow-md hidden">
+  <header id="app-header" style="display: none;" class="hidden sticky top-0 z-40 glass-dark text-white">
     <div class="max-w-7xl mx-auto px-4 py-4 flex flex-wrap justify-between items-center gap-3">
       <div class="flex items-center space-x-3">
-        <i class="fa-solid fa-qrcode text-2xl bg-white text-indigo-600 p-2 rounded-lg"></i>
+        <span class="qr-logo w-11 h-11 rounded-2xl grid place-items-center text-white text-lg" style="background: linear-gradient(135deg, #6366f1 0%, #3b82f6 45%, #f59e0b 100%);">
+          <i class="fa-solid fa-qrcode"></i>
+        </span>
         <div>
-          <h1 class="text-lg font-bold tracking-wide leading-tight">CampusQR Attend</h1>
-          <p class="text-xs text-indigo-200">School Event Attendance System</p>
+          <p class="text-xs text-indigo-200 font-medium tracking-wide">School Event Attendance System</p>
         </div>
       </div>
       <nav id="main-nav" class="hidden md:flex items-center space-x-2 text-sm font-medium"></nav>
@@ -32,7 +158,7 @@
           <div id="current-user-name" class="text-sm font-semibold">-</div>
           <div id="current-user-role" class="text-xs text-indigo-200">-</div>
         </div>
-        <button id="logout-btn" class="bg-indigo-700 hover:bg-indigo-800 border border-indigo-400 px-3 py-2 rounded-lg text-xs font-semibold">
+        <button id="logout-btn" class="bg-white/15 hover:bg-white/25 border border-white/30 px-3 py-2 rounded-lg text-xs font-semibold backdrop-blur">
           <i class="fa-solid fa-right-from-bracket mr-1"></i>Logout
         </button>
       </div>
@@ -41,12 +167,12 @@
 
   <div id="app-boot" class="flex-grow flex items-center justify-center p-10">
     <div class="text-center space-y-3">
-      <i class="fa-solid fa-circle-notch fa-spin text-3xl text-indigo-600"></i>
-      <p id="app-boot-text" class="text-sm text-slate-500 font-medium">Loading your portal…</p>
+      <i class="fa-solid fa-circle-notch fa-spin text-3xl text-indigo-300"></i>
+      <p id="app-boot-text" class="text-sm text-indigo-200 font-medium">Loading your portal…</p>
     </div>
   </div>
 
-  <div id="mobile-nav" style="display: none;" class="md:hidden bg-white border-b border-slate-200 flex justify-around py-3 text-xs font-medium text-slate-600 shadow-sm hidden"></div>
+  <div id="mobile-nav" style="display: none;" class="md:hidden glass-dark flex justify-around py-3 text-xs font-medium text-indigo-100 hidden"></div>
 
   <main id="app-main" aria-busy="true" style="display: none;" class="flex-grow max-w-7xl w-full mx-auto p-4 md:p-6 hidden">
 
@@ -123,7 +249,7 @@
 
     <!-- SCAN (student) -->
     <section id="tab-scan" class="tab-content hidden space-y-6">
-      <div class="bg-indigo-900 text-white p-6 rounded-xl shadow-sm">
+      <div class="glass-dark text-white p-6 rounded-xl">
         <h2 class="text-xl font-bold">Scan Event QR Code</h2>
         <p class="text-indigo-200 text-sm">Point your camera at the event QR code, or type the event code manually.</p>
       </div>

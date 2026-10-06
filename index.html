@@ -34,16 +34,7 @@
       animation: shineSweep 2.8s ease-in-out infinite;
     }
     .portal-card {
-      position: relative;
       transition: transform .25s ease, box-shadow .25s ease;
-    }
-    .portal-card::before {
-      content: "";
-      position: absolute;
-      top: 0; left: 10%; right: 10%;
-      height: 3px;
-      border-radius: 9999px;
-      background: linear-gradient(90deg, #6366f1, #a855f7, #f59e0b);
     }
     .portal-card:hover { transform: translateY(-6px); box-shadow: 0 25px 60px rgba(0,0,0,.45); }
     .title-shine {
@@ -55,6 +46,23 @@
       animation: titleShine 5s linear infinite;
     }
     @keyframes titleShine { to { background-position: 200% center; } }
+    /* ---- Unified buttons: smooth lift + glow on hover (all interfaces) ---- */
+    button, .btn-lift, a.nav-btn, select:not([disabled]) {
+      transition: transform .18s ease, box-shadow .18s ease, background-color .18s ease, filter .18s ease;
+    }
+    button:not([disabled]):hover, .btn-lift:hover, a.nav-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(0,0,0,.35);
+      filter: brightness(1.06);
+    }
+    button:not([disabled]):active, .btn-lift:active, a.nav-btn:active {
+      transform: translateY(0) scale(.98);
+      box-shadow: 0 4px 12px rgba(0,0,0,.3);
+    }
+    button:focus-visible, a.nav-btn:focus-visible {
+      outline: 2px solid rgba(255,255,255,.85);
+      outline-offset: 2px;
+    }
   </style>
 </head>
 <body class="text-slate-800 font-sans antialiased min-h-screen flex flex-col" style="background: radial-gradient(ellipse 80% 60% at 50% 30%, #2b2a8f 0%, #1a1865 45%, #0d0c3d 75%, #070724 100%);">
@@ -290,7 +298,89 @@
 
   <!-- Scripts -->
   <script src="supabase-config.js" onerror="window.__configMissing = true"></script>
+  <script>
+    // Fallback portal/tab wiring (plain script, no imports).
+    // The real wiring lives in js/authPage.js (ES module + Supabase CDN import).
+    // If that module fails to load (offline, CDN blocked, import error), NONE of
+    // its click listeners attach and every portal / tab button looks "dead".
+    // This tiny fallback duplicates ONLY the show/hide navigation so the
+    // portal cards, tabs and in-form links always stay clickable.
+    (function () {
+      function showAuthTab(which) {
+        var isLogin = which === 'login';
+        var loginForm = document.getElementById('login-form');
+        var registerForm = document.getElementById('register-form');
+        var msgBox = document.getElementById('auth-message');
+        var loginTab = document.getElementById('tab-login-btn');
+        var regTab = document.getElementById('tab-register-btn');
+        if (loginForm) loginForm.classList.toggle('hidden', !isLogin);
+        if (registerForm) registerForm.classList.toggle('hidden', isLogin);
+        if (msgBox) msgBox.classList.add('hidden');
+        if (loginTab) loginTab.className = 'py-3 border-b-2 ' + (isLogin ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-500 hover:text-indigo-600');
+        if (regTab) regTab.className = 'py-3 border-b-2 ' + (!isLogin ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-500 hover:text-indigo-600');
+      }
+      function on(el, fn) {
+        if (el && !el.dataset.fbWired && !el.dataset.authWired) { el.dataset.fbWired = '1'; el.addEventListener('click', fn); }
+      }
+      function wireFallback() {
+        var panel = document.getElementById('auth-panel');
+        var chooser = document.getElementById('portal-chooser');
+        if (!panel || !chooser) return;
+        var label = document.getElementById('auth-panel-label');
+        var note = document.getElementById('personnel-note');
+        var regTab = document.getElementById('tab-register-btn');
+        var backBtn = document.getElementById('back-to-portals');
+        var msgBox = document.getElementById('auth-message');
+        var open = function (portal, which) {
+          var isPersonnel = portal === 'personnel';
+          if (label) label.textContent = isPersonnel ? 'Personnel portal' : 'Student portal';
+          if (note) note.classList.toggle('hidden', !isPersonnel);
+          if (regTab) regTab.style.display = isPersonnel ? 'none' : '';
+          var wrap = document.getElementById('link-to-register-wrap');
+          if (wrap) wrap.classList.toggle('hidden', isPersonnel);
+          showAuthTab(isPersonnel ? 'login' : which);
+          panel.classList.remove('hidden');
+          chooser.classList.add('hidden');
+          try { panel.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) { /* old browser */ }
+        };
+        on(document.getElementById('portal-personnel-login'), function () { open('personnel', 'login'); });
+        on(document.getElementById('portal-student-login'), function () { open('student', 'login'); });
+        on(document.getElementById('portal-student-register'), function () { open('student', 'register'); });
+        on(document.getElementById('tab-login-btn'), function () { showAuthTab('login'); });
+        on(document.getElementById('tab-register-btn'), function () { showAuthTab('register'); });
+        on(document.getElementById('link-to-register'), function () { showAuthTab('register'); });
+        on(document.getElementById('link-to-login'), function () { showAuthTab('login'); });
+        on(backBtn, function () {
+          panel.classList.add('hidden');
+          chooser.classList.remove('hidden');
+          if (msgBox) msgBox.classList.add('hidden');
+        });
+        window.__authFallbackWired = true;
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', wireFallback, { once: true });
+      } else {
+        wireFallback();
+      }
+    })();
+  </script>
   <script type="module" src="js/authPage.js"></script>
+  <script>
+    // If the ES-module above fails (offline / CDN blocked / file:// without a
+    // local server), the submit handlers never attach and Login/Register look
+    // dead. Surface a clear message instead of silence.
+    setTimeout(function () {
+      if (window.__authBooted) return; // module init() ran fine
+      var msg = document.getElementById('auth-message');
+      if (!msg) return;
+      msg.className = 'mx-6 mb-6 border rounded-lg p-3 text-sm bg-rose-50 border border-rose-200 text-rose-700';
+      var hint = (location.protocol === 'file:')
+        ? 'This page was opened directly as a file, so the login scripts could not start. Run it through a local server instead: `npx serve -l 5173 .` then open http://localhost:5173.'
+        : 'The login scripts could not start (no internet connection or the Supabase CDN is blocked). The portal buttons above still work; Login/Register submit needs the backend scripts loaded. Check your connection and reload.';
+      msg.innerText = hint;
+      msg.classList.remove('hidden');
+    }, 4000);
+  </script>
   <script>
     // Role-based navigation renderer helper
     function renderNavigation(role) {

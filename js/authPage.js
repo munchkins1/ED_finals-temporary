@@ -2,7 +2,7 @@
 // Login / registration page logic (runs on index.html).
 import { supabase, CONFIG_OK } from './supabaseClient.js';
 import { toast, setBusy } from './ui.js';
-import { signIn, signUp } from './auth.js';
+import { signIn, signUp, signOut } from './auth.js';
 import {
   COURSES, YEARS, BLOCKS,
   fillSelect, applyLevelFields, readLevelFields,
@@ -49,44 +49,59 @@ function showMessage(text, kind = 'error') {
 }
 
 function init() {
-  if (!CONFIG_OK) {
-    document.getElementById('config-warning').classList.remove('hidden');
-    loginForm.querySelector('button[type="submit"]').disabled = true;
-    registerForm.querySelector('button[type="submit"]').disabled = true;
+  // Wire the UI FIRST so the portal cards / tabs always stay clickable,
+  // even if Supabase config is missing or the CDN import failed.
+  // (index.html also wires a no-import fallback; skip duplicates via dataset.)
+  wireTabs();
+  if (loginForm) loginForm.addEventListener('submit', onLogin);
+  if (registerForm) registerForm.addEventListener('submit', onRegister);
+
+  // Educational Level drives every dependent input below it.
+  const levelSel = document.getElementById('reg-educational-level');
+  if (levelSel) levelSel.addEventListener('change', renderRegLevelFields);
+  try { renderRegLevelFields(); } catch { /* non-fatal */ }
+
+  if (!CONFIG_OK || !supabase) {
+    document.getElementById('config-warning')?.classList.remove('hidden');
+    loginForm?.querySelector('button[type="submit"]')?.setAttribute('disabled', '');
+    registerForm?.querySelector('button[type="submit"]')?.setAttribute('disabled', '');
+    showMessage(
+      'Cannot reach the authentication service. Check your internet connection and supabase-config.js, then reload.',
+      'error'
+    );
     return;
   }
 
   // already signed in? go straight to the app
   supabase.auth.getSession().then(({ data }) => {
     if (data.session) location.replace('app.html');
-  });
+  }).catch(() => { /* stay on login page */ });
+}
 
-  wireTabs();
-  loginForm.addEventListener('submit', onLogin);
-  registerForm.addEventListener('submit', onRegister);
+function showAuthTab(which) {
+  const loginTab = document.getElementById('tab-login-btn');
+  const regTab = document.getElementById('tab-register-btn');
+  const isLogin = which === 'login';
+  loginForm?.classList.toggle('hidden', !isLogin);
+  registerForm?.classList.toggle('hidden', isLogin);
+  msgBox?.classList.add('hidden');
+  if (loginTab) loginTab.className = `py-3 border-b-2 ${isLogin ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-500 hover:text-indigo-600'}`;
+  if (regTab) regTab.className = `py-3 border-b-2 ${!isLogin ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-500 hover:text-indigo-600'}`;
+}
 
-  // Educational Level drives every dependent input below it.
-  const levelSel = document.getElementById('reg-educational-level');
-  if (levelSel) levelSel.addEventListener('change', renderRegLevelFields);
-  renderRegLevelFields();
+function wireOnce(el, evt, fn) {
+  if (!el || el.dataset.authWired || el.dataset.fbWired) return;
+  el.dataset.authWired = '1';
+  el.addEventListener(evt, fn);
 }
 
 function wireTabs() {
-  const loginTab = document.getElementById('tab-login-btn');
-  const regTab = document.getElementById('tab-register-btn');
-  const show = (which) => {
-    const isLogin = which === 'login';
-    loginForm.classList.toggle('hidden', !isLogin);
-    registerForm.classList.toggle('hidden', isLogin);
-    msgBox.classList.add('hidden');
-    loginTab.className = `py-3 border-b-2 ${isLogin ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-500 hover:text-indigo-600'}`;
-    regTab.className = `py-3 border-b-2 ${!isLogin ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-500 hover:text-indigo-600'}`;
-  };
-  loginTab.addEventListener('click', () => show('login'));
-  regTab.addEventListener('click', () => show('register'));
+  const show = (which) => showAuthTab(which);
+  wireOnce(document.getElementById('tab-login-btn'), 'click', () => show('login'));
+  wireOnce(document.getElementById('tab-register-btn'), 'click', () => show('register'));
   // In-form cross-links below the submit buttons (same toggle, tabs stay in sync).
-  document.getElementById('link-to-register')?.addEventListener('click', () => show('register'));
-  document.getElementById('link-to-login')?.addEventListener('click', () => show('login'));
+  wireOnce(document.getElementById('link-to-register'), 'click', () => show('register'));
+  wireOnce(document.getElementById('link-to-login'), 'click', () => show('login'));
   wirePortals(show);
 }
 
@@ -115,16 +130,13 @@ function wirePortals(show) {
     panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  document.getElementById('portal-personnel-login')
-    ?.addEventListener('click', () => open('personnel', 'login'));
-  document.getElementById('portal-student-login')
-    ?.addEventListener('click', () => open('student', 'login'));
-  document.getElementById('portal-student-register')
-    ?.addEventListener('click', () => open('student', 'register'));
-  backBtn?.addEventListener('click', () => {
+  wireOnce(document.getElementById('portal-personnel-login'), 'click', () => open('personnel', 'login'));
+  wireOnce(document.getElementById('portal-student-login'), 'click', () => open('student', 'login'));
+  wireOnce(document.getElementById('portal-student-register'), 'click', () => open('student', 'register'));
+  wireOnce(backBtn, 'click', () => {
     panel.classList.add('hidden');
     chooser.classList.remove('hidden');
-    msgBox.classList.add('hidden');
+    msgBox?.classList.add('hidden');
   });
 }
 
@@ -196,13 +208,26 @@ async function onRegister(e) {
     const { session } = await signUp(email, password, fullName, {
       phone, studentNumber, department, gradeClass, ...edu
     });
+    // Always send the user back to the Login portal after a successful
+    // registration. Supabase auto-signs-in when email confirmation is OFF
+    // (returns a session), which used to jump straight into app.html.
+    // Sign out to clear that session, then switch to the Login tab.
     if (session) {
-      toast('Account created. Welcome!', 'success');
-      location.replace('app.html');
-    } else {
-      showMessage('Account created. Please check your email to confirm, then log in.', 'success');
-      setBusy(btn, false);
+      try { await signOut(); } catch { /* best-effort cleanup */ }
     }
+    form.reset();
+    renderRegLevelFields();
+    showAuthTab('login');
+    // Pre-fill the login email so the user just enters their password.
+    if (loginForm && loginForm.email) loginForm.email.value = email;
+    showMessage(
+      session
+        ? 'Account created successfully. Please log in with your new account.'
+        : 'Account created. Please check your email to confirm, then log in.',
+      'success'
+    );
+    toast('Account created. Please log in.', 'success');
+    setBusy(btn, false);
   } catch (err) {
     showMessage(err.message || 'Registration failed.');
     setBusy(btn, false);
@@ -214,8 +239,20 @@ async function onRegister(e) {
 // Registering a plain 'DOMContentLoaded' listener would therefore never run the
 // initializer (and the form would silently do nothing). Boot immediately when the
 // document is ready, otherwise wait for the event.
+window.__authBooted = false;
+function boot() {
+  try {
+    init();
+    window.__authBooted = true;
+  } catch (err) {
+    console.error('authPage boot failed', err);
+    try {
+      showMessage('Login page failed to start. Reload the page; if it persists, check your internet connection (CDN scripts may be blocked).', 'error');
+    } catch { /* msg box itself missing */ }
+  }
+}
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', init, { once: true });
+  document.addEventListener('DOMContentLoaded', boot, { once: true });
 } else {
-  init();
+  boot();
 }

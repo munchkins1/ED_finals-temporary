@@ -35,15 +35,15 @@ export async function renderMyAttendance() {
   if (sc) {
     sc.innerHTML = `
       <div class="grid grid-cols-3 gap-3">
-        <div class="bg-white rounded-xl border border-slate-200 p-4 text-center">
+        <div class="glass rounded-xl p-4 text-center">
           <div class="text-2xl font-bold text-indigo-600">${total}</div>
           <div class="text-xs text-slate-500 uppercase font-semibold">Events attended</div>
         </div>
-        <div class="bg-white rounded-xl border border-slate-200 p-4 text-center">
+        <div class="glass rounded-xl p-4 text-center">
           <div class="text-2xl font-bold text-emerald-600">${present}</div>
           <div class="text-xs text-slate-500 uppercase font-semibold">Present</div>
         </div>
-        <div class="bg-white rounded-xl border border-slate-200 p-4 text-center">
+        <div class="glass rounded-xl p-4 text-center">
           <div class="text-2xl font-bold text-slate-800">${rate}%</div>
           <div class="text-xs text-slate-500 uppercase font-semibold">Attendance rate</div>
         </div>
@@ -164,7 +164,7 @@ function renderRecordsSummary(rows) {
   const counts = { present: 0, late: 0, absent: 0, excused: 0 };
   rows.forEach(r => { counts[r.status] = (counts[r.status] || 0) + 1; });
   const card = (label, val, color) => `
-    <div class="bg-white rounded-xl border border-slate-200 p-4 text-center">
+    <div class="glass rounded-xl p-4 text-center">
       <div class="text-2xl font-bold ${color}">${val}</div>
       <div class="text-xs text-slate-500 uppercase font-semibold">${label}</div>
     </div>`;
