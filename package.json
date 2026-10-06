@@ -1,0 +1,11 @@
+{
+  "name": "campusqr-attendance",
+  "version": "1.0.0",
+  "description": "School event attendance system using QR codes (Supabase + vanilla JS, no build step).",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "npx --yes serve -l 5173 .",
+    "dev": "npx --yes serve -l 5173 ."
+  }
+}

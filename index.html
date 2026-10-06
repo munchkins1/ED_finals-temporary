@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CampusQR · School Event Attendance System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+    .animate-fade-in { animation: fadeIn .25s ease-out; }
+    @keyframes floatY { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    @keyframes shineSweep {
+      0% { transform: translateX(-130%) skewX(-18deg); opacity: 0; }
+      20% { opacity: 1; }
+      55% { transform: translateX(130%) skewX(-18deg); opacity: 1; }
+      100% { transform: translateX(130%) skewX(-18deg); opacity: 0; }
+    }
+    @keyframes pulseGlow {
+      0%,100% { box-shadow: 0 0 45px rgba(99,102,241,.55), 0 0 90px rgba(59,130,246,.35), 0 18px 40px rgba(0,0,0,.45); }
+      50% { box-shadow: 0 0 65px rgba(99,102,241,.75), 0 0 120px rgba(59,130,246,.5), 0 18px 40px rgba(0,0,0,.45); }
+    }
+    .qr-logo {
+      position: relative;
+      overflow: hidden;
+      animation: floatY 4s ease-in-out infinite, pulseGlow 3.2s ease-in-out infinite;
+    }
+    .qr-logo::after {
+      content: "";
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 45%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent);
+      animation: shineSweep 2.8s ease-in-out infinite;
+    }
+    .portal-card {
+      position: relative;
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+    .portal-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 10%; right: 10%;
+      height: 3px;
+      border-radius: 9999px;
+      background: linear-gradient(90deg, #6366f1, #a855f7, #f59e0b);
+    }
+    .portal-card:hover { transform: translateY(-6px); box-shadow: 0 25px 60px rgba(0,0,0,.45); }
+    .title-shine {
+      background: linear-gradient(100deg, #818cf8 10%, #fff 35%, #60a5fa 55%, #818cf8 80%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: titleShine 5s linear infinite;
+    }
+    @keyframes titleShine { to { background-position: 200% center; } }
+  </style>
+</head>
+<body class="text-slate-800 font-sans antialiased min-h-screen flex flex-col" style="background: radial-gradient(ellipse 80% 60% at 50% 30%, #2b2a8f 0%, #1a1865 45%, #0d0c3d 75%, #070724 100%);">
+
+  <!-- Config Warning Banner -->
+  <div id="config-warning" class="hidden bg-amber-50 border-b border-amber-200 text-amber-800 p-3 text-xs text-center font-medium">
+    <i class="fa-solid fa-triangle-exclamation mr-1"></i> Supabase configuration missing. Ensure `supabase-config.js` is properly set up.
+  </div>
+
+  <!-- Dynamic Header Navigation (Appears after login) -->
+  <header id="app-header" class="bg-indigo-600 text-white shadow-md hidden">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <i class="fa-solid fa-qrcode text-xl bg-white text-indigo-600 p-2 rounded-lg"></i>
+        <div>
+          <h1 class="font-bold tracking-wide text-sm md:text-base leading-tight">CampusQR Attend</h1>
+          <p id="user-role-subtitle" class="text-xs text-indigo-200">System Portal</p>
+        </div>
+      </div>
+
+      <!-- Role-Based Navigation Container (Injected via JS based on user role) -->
+      <nav id="nav-container" class="flex items-center space-x-1 md:space-x-3 text-sm font-medium">
+        <!-- Buttons are injected dynamically -->
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="flex-grow flex items-center justify-center p-4 md:p-6">
+
+    <!-- VIEW: AUTH (Portal chooser + Login & Register) -->
+    <section id="view-auth" class="w-full max-w-3xl animate-fade-in">
+      <!-- Hero: QR logo + title -->
+      <div class="text-center mb-8">
+        <div class="flex justify-center mb-5">
+          <div class="qr-logo w-24 h-24 rounded-3xl flex items-center justify-center text-white text-5xl" style="background: linear-gradient(135deg, #6366f1 0%, #3b82f6 40%, #f59e0b 100%);">
+            <i class="fa-solid fa-qrcode drop-shadow-lg"></i>
+          </div>
+        </div>
+        <h1 class="title-shine text-4xl md:text-5xl font-extrabold tracking-tight">School Event Attendance System</h1>
+        <p class="mt-3 text-sm md:text-base text-indigo-200/90 font-medium">Select your portal to continue</p>
+      </div>
+
+      <!-- Portal chooser: PERSONNEL (left) / STUDENT (right) -->
+      <div id="portal-chooser" class="grid md:grid-cols-2 gap-6 mb-2">
+        <!-- LEFT: PERSONNEL — Login only -->
+        <div class="portal-card bg-white rounded-3xl shadow-xl p-7 text-center overflow-hidden">
+          <div class="flex justify-center mb-4">
+            <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg shadow-indigo-500/40" style="background: linear-gradient(135deg, #6366f1, #312e81);">
+              <i class="fa-solid fa-user-tie"></i>
+            </div>
+          </div>
+          <h2 class="font-extrabold tracking-widest text-sm text-indigo-900">PERSONNEL</h2>
+          <p class="text-xs text-slate-500 mt-1 mb-5">Teachers &amp; administrators sign in here.</p>
+          <button id="portal-personnel-login" type="button" class="w-full py-2.5 rounded-xl font-semibold text-sm text-white transition hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" style="background: linear-gradient(90deg, #6366f1, #312e81);">
+            Login
+          </button>
+        </div>
+        <!-- RIGHT: STUDENT — Login + Create Account -->
+        <div class="portal-card bg-white rounded-3xl shadow-xl p-7 text-center overflow-hidden">
+          <div class="flex justify-center mb-4">
+            <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg shadow-amber-500/40" style="background: linear-gradient(135deg, #fbbf24, #f59e0b);">
+              <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+          </div>
+          <h2 class="font-extrabold tracking-widest text-sm text-indigo-900">STUDENT</h2>
+          <p class="text-xs text-slate-500 mt-1 mb-5">Students sign in or create an account.</p>
+          <div class="grid grid-cols-2 gap-2">
+            <button id="portal-student-login" type="button" class="py-2.5 rounded-xl font-semibold text-sm text-white transition hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2" style="background: linear-gradient(90deg, #fbbf24, #f59e0b);">
+              Login
+            </button>
+            <button id="portal-student-register" type="button" class="py-2.5 rounded-xl font-semibold text-sm text-white transition hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" style="background: linear-gradient(90deg, #6366f1, #312e81);">
+              Create Account
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form panel (hidden until a portal is picked; keeps original IDs so auth logic is untouched) -->
+      <div id="auth-panel" class="hidden bg-white rounded-3xl shadow-xl overflow-hidden mt-6 w-full max-w-md mx-auto">
+        <div class="relative flex items-center justify-center px-6 pt-4">
+          <button id="back-to-portals" type="button" class="absolute left-6 text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition">
+            <i class="fa-solid fa-arrow-left mr-1"></i>Back to portals
+          </button>
+          <span id="auth-panel-label" class="mx-auto px-16 text-center text-[11px] font-bold tracking-widest text-slate-400 uppercase">Student portal</span>
+        </div>
+        <p id="personnel-note" class="hidden mx-6 mt-3 text-xs bg-indigo-50 border border-indigo-200 text-indigo-700 rounded-lg p-3">
+          <i class="fa-solid fa-circle-info mr-1"></i>Personnel accounts are created by an administrator — login only, no self-registration.
+        </p>
+        <div class="grid grid-cols-2 text-sm font-semibold">
+          <button id="tab-login-btn" class="py-3 border-b-2 border-indigo-600 text-indigo-600">Login</button>
+          <button id="tab-register-btn" class="py-3 border-b-2 border-transparent text-slate-500 hover:text-indigo-600">Register</button>
+        </div>
+
+        <!-- Login Form -->
+        <form id="login-form" class="p-6 space-y-4">
+          <h2 class="text-lg font-bold text-center">Welcome back</h2>
+          <div>
+            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Email</label>
+            <input name="email" type="email" required autocomplete="email"
+              class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              placeholder="you@school.edu">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Password</label>
+            <input name="password" type="password" required autocomplete="current-password"
+              class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              placeholder="Enter your password">
+          </div>
+          <button type="submit" class="w-full bg-indigo-600 text-white py-2.5 rounded-lg font-semibold hover:bg-indigo-700 transition">
+            <i class="fa-solid fa-right-to-bracket mr-2"></i>Login
+          </button>
+          <p id="link-to-register-wrap" class="text-center text-sm text-slate-500">
+            Don't have an account?
+            <button id="link-to-register" type="button" class="font-semibold text-indigo-600 hover:text-indigo-800 hover:underline">Register</button>
+          </p>
+        </form>
+
+        <!-- Register Form -->
+        <form id="register-form" class="p-6 space-y-4 hidden">
+          <h2 class="text-lg font-bold text-center">Create a student account</h2>
+          <div>
+            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Full name</label>
+            <input name="full_name" type="text" required
+              class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              placeholder="Jane Doe">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Email</label>
+            <input name="email" type="email" required autocomplete="email"
+              class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              placeholder="you@school.edu">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Phone Number</label>
+            <input name="phone" type="tel" autocomplete="tel" inputmode="tel"
+              class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              placeholder="09XX XXX XXXX">
+            <p class="text-xs text-slate-400 mt-1">Optional. Used for event announcements.</p>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">School ID Number</label>
+            <input name="student_number" type="text" required
+              class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              placeholder="e.g. STU-2026-001">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Password</label>
+            <input name="password" type="password" required minlength="6" autocomplete="new-password"
+              class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              placeholder="At least 6 characters">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Confirm password</label>
+            <input name="confirm" type="password" required minlength="6" autocomplete="new-password"
+              class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              placeholder="Repeat password">
+          </div>
+          <!-- Educational Level drives every field below it. The option lists
+               live in js/education.js, shared with the profile page and the
+               admin modal so the three can never disagree. -->
+          <div>
+            <label for="reg-educational-level" class="block text-xs font-semibold uppercase text-slate-500 mb-1">Educational Level</label>
+            <select id="reg-educational-level" data-edu-input="educational_level" required
+              class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white">
+              <option value="">Select Educational Level...</option>
+              <option value="college">College</option>
+              <option value="senior_high">Senior High School</option>
+              <option value="junior_high">Junior High School</option>
+              <option value="elementary">Elementary</option>
+            </select>
+          </div>
+
+          <!-- Level-specific inputs. applyLevelFields() hides AND disables the
+               irrelevant ones; a `required` control left enabled inside a
+               hidden container silently blocks submit with "An invalid form
+               control with name='' is not focusable". -->
+          <div data-edu-field="course" class="hidden">
+            <label for="reg-course" class="block text-xs font-semibold uppercase text-slate-500 mb-1">
+              <span id="reg-course-label">Department / Course</span>
+            </label>
+            <select id="reg-course" data-edu-input="course" required
+              class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white"></select>
+          </div>
+
+          <div data-edu-field="yearLevel" class="hidden">
+            <label for="reg-year-level" class="block text-xs font-semibold uppercase text-slate-500 mb-1">
+              <span id="reg-year-label">Year Level</span>
+            </label>
+            <select id="reg-year-level" data-edu-input="year_level" required
+              class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white"></select>
+          </div>
+
+          <div data-edu-field="block" class="hidden">
+            <label for="reg-block" class="block text-xs font-semibold uppercase text-slate-500 mb-1">Block</label>
+            <select id="reg-block" data-edu-input="block" required
+              class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white"></select>
+          </div>
+
+          <div data-edu-field="section" class="hidden">
+            <label for="reg-section" class="block text-xs font-semibold uppercase text-slate-500 mb-1">Section</label>
+            <input id="reg-section" data-edu-input="section" type="text" required maxlength="20"
+              class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              placeholder="e.g. A">
+          </div>
+          <button type="submit" class="w-full bg-indigo-600 text-white py-2.5 rounded-lg font-semibold hover:bg-indigo-700 transition">
+            <i class="fa-solid fa-user-plus mr-2"></i>Register
+          </button>
+          <p class="text-center text-sm text-slate-500">
+            Already have an account?
+            <button id="link-to-login" type="button" class="font-semibold text-indigo-600 hover:text-indigo-800 hover:underline">Log in</button>
+          </p>
+          <p class="text-xs text-slate-500">New accounts register as <b>students</b> automatically.</p>
+        </form>
+
+        <div id="auth-message" class="hidden"></div>
+      </div><!-- /#auth-panel -->
+    </section>
+
+    <!-- VIEW: APP DASHBOARD CONTAINER (Hidden until login) -->
+    <section id="view-dashboard" class="w-full max-w-7xl hidden animate-fade-in">
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 text-center">
+        <h2 id="dashboard-title" class="text-xl font-bold mb-2 text-center">Dashboard</h2>
+        <p class="text-sm text-slate-500 text-center">Welcome to your portal view.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="text-center py-4 text-xs text-indigo-200/70">
+    Protected by Supabase Auth · Row Level Security enabled
+  </footer>
+
+  <!-- Scripts -->
+  <script src="supabase-config.js" onerror="window.__configMissing = true"></script>
+  <script type="module" src="js/authPage.js"></script>
+  <script>
+    // Role-based navigation renderer helper
+    function renderNavigation(role) {
+      const header = document.getElementById('app-header');
+      const authView = document.getElementById('view-auth');
+      const dashboardView = document.getElementById('view-dashboard');
+      const navContainer = document.getElementById('nav-container');
+      const subtitle = document.getElementById('user-role-subtitle');
+      
+      header.classList.remove('hidden');
+      authView.classList.add('hidden');
+      dashboardView.classList.remove('hidden');
+      navContainer.innerHTML = '';
+
+      if (role === 'student') {
+        subtitle.textContent = 'Student Portal';
+        navContainer.innerHTML = `
+          <a href="#events" class="px-3 py-2 rounded-lg hover:bg-indigo-700 transition flex items-center gap-1.5"><i class="fa-solid fa-calendar-days"></i> Events</a>
+          <a href="#scan" class="px-3 py-2 rounded-lg hover:bg-indigo-700 transition flex items-center gap-1.5"><i class="fa-solid fa-camera"></i> Scan QR</a>
+          <a href="#history" class="px-3 py-2 rounded-lg hover:bg-indigo-700 transition flex items-center gap-1.5"><i class="fa-solid fa-clock-rotate-left"></i> My History</a>
+          <a href="#profile" class="px-3 py-2 rounded-lg hover:bg-indigo-700 transition flex items-center gap-1.5"><i class="fa-solid fa-user"></i> Profile</a>
+          <button id="logout-btn" class="bg-indigo-700 hover:bg-indigo-800 px-3 py-2 rounded-lg transition text-xs font-semibold ml-2"><i class="fa-solid fa-right-from-bracket mr-1"></i> Logout</button>
+        `;
+      } else if (role === 'teacher') {
+        subtitle.textContent = 'Teacher Portal';
+        navContainer.innerHTML = `
+          <a href="#events" class="px-3 py-2 rounded-lg hover:bg-indigo-700 transition flex items-center gap-1.5"><i class="fa-solid fa-calendar-plus"></i> Manage Events</a>
+          <a href="#qr-generator" class="px-3 py-2 rounded-lg hover:bg-indigo-700 transition flex items-center gap-1.5"><i class="fa-solid fa-qrcode"></i> Generate QR</a>
+          <a href="#monitor" class="px-3 py-2 rounded-lg hover:bg-indigo-700 transition flex items-center gap-1.5"><i class="fa-solid fa-chart-line"></i> Monitor Attendance</a>
+          <a href="#summaries" class="px-3 py-2 rounded-lg hover:bg-indigo-700 transition flex items-center gap-1.5"><i class="fa-solid fa-file-lines"></i> Summaries</a>
+          <button id="logout-btn" class="bg-indigo-700 hover:bg-indigo-800 px-3 py-2 rounded-lg transition text-xs font-semibold ml-2"><i class="fa-solid fa-right-from-bracket mr-1"></i> Logout</button>
+        `;
+      } else if (role === 'admin') {
+        subtitle.textContent = 'Administrator Portal';
+        navContainer.innerHTML = `
+          <a href="#users" class="px-3 py-2 rounded-lg hover:bg-indigo-700 transition flex items-center gap-1.5"><i class="fa-solid fa-users-gear"></i> Manage Users</a>
+          <a href="#events" class="px-3 py-2 rounded-lg hover:bg-indigo-700 transition flex items-center gap-1.5"><i class="fa-solid fa-calendar-days"></i> Manage Events</a>
+          <a href="#attendance" class="px-3 py-2 rounded-lg hover:bg-indigo-700 transition flex items-center gap-1.5"><i class="fa-solid fa-clipboard-user"></i> Overall Attendance</a>
+          <a href="#correct-records" class="px-3 py-2 rounded-lg hover:bg-indigo-700 transition flex items-center gap-1.5"><i class="fa-solid fa-pen-to-square"></i> Correct Records</a>
+          <a href="#reports" class="px-3 py-2 rounded-lg hover:bg-indigo-700 transition flex items-center gap-1.5"><i class="fa-solid fa-chart-pie"></i> System Reports</a>
+          <button id="logout-btn" class="bg-indigo-700 hover:bg-indigo-800 px-3 py-2 rounded-lg transition text-xs font-semibold ml-2"><i class="fa-solid fa-right-from-bracket mr-1"></i> Logout</button>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>
