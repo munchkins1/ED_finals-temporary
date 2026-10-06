@@ -1,5 +1,4 @@
 # ---- Local secrets (NEVER commit) ----
-supabase-config.js
 .env
 .env.local
 .env.*.local
