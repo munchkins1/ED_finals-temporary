@@ -239,9 +239,14 @@ function renderNav() {
 
   // Desktop: pill links exactly like the per-role nav designs.
   if (nav) {
-    nav.innerHTML = items.map(n =>
-      `<a href="${n.href}" class="nav-btn px-4 py-2 rounded-full transition flex items-center gap-1.5" data-tab="${n.tab}"><i class="fa-solid ${n.icon}"></i> ${n.label}</a>`
-    ).join('');
+    const links = items.map(n =>
+      `<a href="${n.href}" class="nav-btn px-4 py-2 rounded-full transition flex items-center gap-1.5 whitespace-nowrap" data-tab="${n.tab}"><i class="fa-solid ${n.icon}"></i> ${n.label}</a>`
+    );
+    // Admin's five tabs stack as two balanced rows (2 + 3) instead of one line.
+    if (links.length > 4) {
+      links.splice(2, 0, '<span aria-hidden="true" style="flex-basis:100%"></span>');
+    }
+    nav.innerHTML = links.join('');
   }
 
   // Mobile: same items, icon-over-label, horizontally scrollable.

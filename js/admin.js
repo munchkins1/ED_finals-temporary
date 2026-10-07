@@ -121,15 +121,12 @@ function inferEducationalLevel(u) {
 
 /** Build the labelled Student ID / Course / Year / Block ... block for one row. */
 function renderUserDetails(u) {
-  // Staff accounts hold no student details: render the SAME label/value rows
-  // as a student (Student ID, Course, Year Level, Section) with a centered "-"
-  // placeholder so every Details cell shares one vertical structure and spacing.
+  // Staff accounts hold no student details: labels are omitted entirely and
+  // four centered "-" lines mirror a student row's text-xs height and gap-y-1
+  // rhythm, so every Details cell keeps the exact same vertical structure.
   if (u.role !== 'student') {
-    const staffRows = [['Student ID', '-'], ['Course', '-'], ['Year Level', '-'], ['Section', '-']];
-    return `<div class="grid grid-cols-[auto_1fr] gap-x-2 gap-y-1 text-xs">
-      ${staffRows.map(([label, value]) => `
-      <div class="text-slate-400 font-semibold whitespace-nowrap">${label}</div>
-      <div class="text-slate-700 font-medium break-words text-center">${value}</div>`).join('')}
+    return `<div class="grid grid-cols-1 gap-y-1 text-xs">
+      ${['-', '-', '-', '-'].map(v => `<div class="text-slate-700 font-medium text-center">${v}</div>`).join('')}
     </div>`;
   }
   const level  = inferEducationalLevel(u);
@@ -414,9 +411,9 @@ export async function renderAdminOverview() {
     return;
   }
 
-  const card = (label, val) => `
+  const card = (label, val, color) => `
     <div class="bg-white/15 backdrop-blur-md border border-white/30 shadow-2xl rounded-3xl p-4 text-center">
-      <div class="text-white font-bold text-2xl">${val}</div>
+      <div class="${color} font-bold text-2xl">${val}</div>
       <div class="text-slate-100 text-xs uppercase font-semibold">${label}</div>
     </div>`;
 
@@ -424,12 +421,12 @@ export async function renderAdminOverview() {
   attendance.forEach(a => { totals[a.status] = (totals[a.status] || 0) + 1; });
 
   box.innerHTML = `
-    <div class="grid grid-cols-5 gap-4 mb-5">
-      ${card('Events', events.length)}
-      ${card('Check-ins', attendance.length)}
-      ${card('Present', totals.present)}
-      ${card('Late', totals.late)}
-      ${card('Absent', totals.absent)}
+    <div class="grid grid-cols-4 lg:grid-cols-5 gap-4 mb-5">
+      ${card('Events', events.length, 'text-white')}
+      ${card('Check-ins', attendance.length, 'text-emerald-400')}
+      ${card('Present', totals.present, 'text-emerald-400')}
+      ${card('Late', totals.late, 'text-amber-400')}
+      ${card('Absent', totals.absent, 'text-rose-400')}
     </div>
     <div class="w-full overflow-x-auto">
       <table class="w-full text-left border-collapse text-sm min-w-[520px]">
@@ -599,14 +596,14 @@ function renderAdminRecordsSummary(rows) {
   const card = (label, val, color) => `
     <div class="bg-white/15 backdrop-blur-md border border-white/30 shadow-2xl rounded-3xl p-4 text-center">
       <div class="text-2xl font-bold ${color} text-center">${val}</div>
-      <div class="text-xs text-slate-300 uppercase font-semibold text-center">${label}</div>
+      <div class="text-xs text-slate-100 uppercase font-semibold text-center">${label}</div>
     </div>`;
-  box.innerHTML = `<div class="grid grid-cols-5 gap-4">
-    ${card('Total', rows.length, 'text-indigo-200')}
-    ${card('Present', counts.present, 'text-emerald-300')}
-    ${card('Late', counts.late, 'text-amber-300')}
-    ${card('Absent', counts.absent, 'text-rose-300')}
-    ${card('Excused', counts.excused, 'text-blue-300')}
+  box.innerHTML = `<div class="grid grid-cols-4 lg:grid-cols-5 gap-4">
+    ${card('Total', rows.length, 'text-white')}
+    ${card('Present', counts.present, 'text-emerald-400')}
+    ${card('Late', counts.late, 'text-amber-400')}
+    ${card('Absent', counts.absent, 'text-rose-400')}
+    ${card('Excused', counts.excused, 'text-slate-300')}
   </div>`;
 }
 

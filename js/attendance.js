@@ -166,14 +166,14 @@ function renderRecordsSummary(rows) {
   const card = (label, val, color) => `
     <div class="bg-white/15 backdrop-blur-md border border-white/30 shadow-2xl rounded-3xl p-4 text-center">
       <div class="text-2xl font-bold ${color} text-center">${val}</div>
-      <div class="text-xs text-slate-300 uppercase font-semibold text-center">${label}</div>
+      <div class="text-xs text-slate-100 uppercase font-semibold text-center">${label}</div>
     </div>`;
   box.innerHTML = `<div class="grid grid-cols-5 gap-4">
-    ${card('Total', rows.length, 'text-indigo-200')}
-    ${card('Present', counts.present, 'text-emerald-300')}
-    ${card('Late', counts.late, 'text-amber-300')}
-    ${card('Absent', counts.absent, 'text-rose-300')}
-    ${card('Excused', counts.excused, 'text-blue-300')}
+    ${card('Total', rows.length, 'text-white')}
+    ${card('Present', counts.present, 'text-emerald-400')}
+    ${card('Late', counts.late, 'text-amber-400')}
+    ${card('Absent', counts.absent, 'text-rose-400')}
+    ${card('Excused', counts.excused, 'text-slate-300')}
   </div>`;
 }
 
