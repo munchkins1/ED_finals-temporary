@@ -40,12 +40,12 @@ function showResult(kind, message, eventName) {
   const box = document.getElementById('scan-result');
   if (!box) return;
   const map = {
-    success:      { bg: 'bg-emerald-50 border-emerald-200 text-emerald-800', icon: 'fa-circle-check', label: 'Attendance recorded' },
-    duplicate:    { bg: 'bg-amber-50 border-amber-200 text-amber-800',       icon: 'fa-triangle-exclamation', label: 'Already checked in' },
-    closed:       { bg: 'bg-slate-100 border-slate-300 text-slate-700',      icon: 'fa-lock', label: 'Event closed' },
-    invalid:      { bg: 'bg-rose-50 border-rose-200 text-rose-800',          icon: 'fa-circle-xmark', label: 'Invalid QR code' },
-    unauthorized: { bg: 'bg-rose-50 border-rose-200 text-rose-800',          icon: 'fa-ban', label: 'Not permitted' },
-    error:        { bg: 'bg-rose-50 border-rose-200 text-rose-800',          icon: 'fa-triangle-exclamation', label: 'Error' }
+    success:      { bg: 'bg-emerald-500/15 border-emerald-400/40 text-emerald-100', icon: 'fa-circle-check', label: 'Attendance recorded' },
+    duplicate:    { bg: 'bg-amber-500/15 border-amber-400/40 text-amber-100',      icon: 'fa-triangle-exclamation', label: 'Already checked in' },
+    closed:       { bg: 'bg-white/10 border-white/25 text-slate-200',               icon: 'fa-lock', label: 'Event closed' },
+    invalid:      { bg: 'bg-rose-500/15 border-rose-400/40 text-rose-100',          icon: 'fa-circle-xmark', label: 'Invalid QR code' },
+    unauthorized: { bg: 'bg-rose-500/15 border-rose-400/40 text-rose-100',          icon: 'fa-ban', label: 'Not permitted' },
+    error:        { bg: 'bg-rose-500/15 border-rose-400/40 text-rose-100',          icon: 'fa-triangle-exclamation', label: 'Error' }
   };
   const c = map[kind] || map.error;
   box.className = `mt-4 border rounded-lg p-4 text-sm ${c.bg}`;

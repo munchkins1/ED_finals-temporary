@@ -34,17 +34,17 @@ export function toLocalInputValue(iso) {
 }
 
 export const STATUS_STYLES = {
-  open: 'bg-emerald-100 text-emerald-700',
-  draft: 'bg-amber-100 text-amber-700',
-  closed: 'bg-slate-200 text-slate-600',
-  present: 'bg-emerald-100 text-emerald-700',
-  late: 'bg-amber-100 text-amber-700',
-  absent: 'bg-rose-100 text-rose-700',
-  excused: 'bg-blue-100 text-blue-700'
+  open: 'bg-emerald-500/20 text-emerald-200 border border-emerald-400/30',
+  draft: 'bg-amber-500/20 text-amber-200 border border-amber-400/30',
+  closed: 'bg-white/15 text-slate-300 border border-white/25',
+  present: 'bg-emerald-500/20 text-emerald-200 border border-emerald-400/30',
+  late: 'bg-amber-500/20 text-amber-200 border border-amber-400/30',
+  absent: 'bg-rose-500/20 text-rose-200 border border-rose-400/30',
+  excused: 'bg-blue-500/20 text-blue-200 border border-blue-400/30'
 };
 
 export function statusBadge(status) {
-  const cls = STATUS_STYLES[status] || 'bg-slate-100 text-slate-600';
+  const cls = STATUS_STYLES[status] || 'bg-white/15 text-slate-300 border border-white/25';
   return `<span class="px-2.5 py-1 rounded-full text-xs font-semibold ${cls}">${esc(status)}</span>`;
 }
 
@@ -85,8 +85,8 @@ export function toast(message, type = 'info', timeout = 3800) {
 
 /** Render a loading / empty / error row inside a <tbody>. */
 export function tableMessage(tbody, cols, text, kind = 'empty') {
-  const color = kind === 'error' ? 'text-rose-500'
-              : kind === 'loading' ? 'text-indigo-500' : 'text-slate-400';
+  const color = kind === 'error' ? 'text-rose-300'
+              : kind === 'loading' ? 'text-indigo-300' : 'text-slate-300';
   const icon = kind === 'loading' ? '<i class="fa-solid fa-spinner fa-spin mr-2"></i>' : '';
   tbody.innerHTML =
     `<tr><td colspan="${cols}" class="p-6 text-center ${color} text-sm">${icon}${esc(text)}</td></tr>`;

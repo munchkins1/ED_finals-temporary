@@ -113,7 +113,7 @@ function renderEventRow(evt) {
   const actions = manage ? manageActions(evt) : studentActions(evt);
   let html = '<tr class="hover:bg-white/5 transition-colors duration-200 align-middle">';
   html += '<td class="p-4 w-1/4 align-middle"><div class="font-semibold text-white whitespace-nowrap">' + esc(evt.name) + '</div>';
-  html += '<div class="text-xs text-slate-300">' + esc(evt.venue || '-') + '</div></td>';
+  html += '<div class="text-xs text-slate-300">' + (evt.venue ? esc(evt.venue) : '') + '</div></td>';
   html += '<td class="p-4 w-1/4 align-middle text-slate-300 text-sm whitespace-nowrap">' + esc(fmtDateTime(evt.start_datetime)) + '</td>';
   html += '<td class="p-4 w-1/4 align-middle">' + statusBadge(evt.status) + '</td>';
   html += '<td class="p-4 w-1/4 align-middle text-right whitespace-nowrap">' + actions + '</td></tr>';

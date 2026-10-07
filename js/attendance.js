@@ -36,16 +36,16 @@ export async function renderMyAttendance() {
     sc.innerHTML = `
       <div class="grid grid-cols-3 gap-3">
         <div class="glass rounded-xl p-4 text-center">
-          <div class="text-2xl font-bold text-indigo-600">${total}</div>
-          <div class="text-xs text-slate-500 uppercase font-semibold">Events attended</div>
+          <div class="text-2xl font-bold text-indigo-300">${total}</div>
+          <div class="text-xs text-slate-400 uppercase font-semibold">Events attended</div>
         </div>
         <div class="glass rounded-xl p-4 text-center">
-          <div class="text-2xl font-bold text-emerald-600">${present}</div>
-          <div class="text-xs text-slate-500 uppercase font-semibold">Present</div>
+          <div class="text-2xl font-bold text-emerald-300">${present}</div>
+          <div class="text-xs text-slate-400 uppercase font-semibold">Present</div>
         </div>
         <div class="glass rounded-xl p-4 text-center">
-          <div class="text-2xl font-bold text-slate-800">${rate}%</div>
-          <div class="text-xs text-slate-500 uppercase font-semibold">Attendance rate</div>
+          <div class="text-2xl font-bold text-white">${rate}%</div>
+          <div class="text-xs text-slate-400 uppercase font-semibold">Attendance rate</div>
         </div>
       </div>`;
   }
@@ -57,7 +57,7 @@ export async function renderMyAttendance() {
   tbody.innerHTML = list.map(r => `
     <tr class="hover:bg-white/5 transition-colors duration-200 align-middle">
       <td class="p-4 flex-1 align-middle font-medium text-white">${esc(r.events?.name || 'Event')}</td>
-      <td class="p-4 flex-1 align-middle text-slate-300">${esc(r.events?.venue || '-')}</td>
+      <td class="p-4 flex-1 align-middle text-slate-300">${r.events?.venue ? esc(r.events.venue) : '—'}</td>
       <td class="p-4 flex-1 align-middle">${statusBadge(r.status)}</td>
       <td class="p-4 flex-1 align-middle text-slate-300 text-sm">${esc(fmtDateTime(r.recorded_at))}</td>
     </tr>`).join('');

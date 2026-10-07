@@ -65,12 +65,38 @@
       outline: 2px solid rgba(255,255,255,.85);
       outline-offset: 2px;
     }
+    /* Dark-theme default text (body carries legacy text-slate-800) */
+    body { color: #e2e8f0 !important; }
+    /* ---- Glass contrast layer for auth forms (labels, inputs, helpers) ---- */
+    #auth-panel label { color: #e2e8f0; text-align: center; }
+    #auth-panel input, #auth-panel select, #auth-panel textarea {
+      background: rgba(255,255,255,.12) !important;
+      border-color: rgba(255,255,255,.28) !important;
+      color: #fff !important;
+    }
+    #auth-panel input::placeholder, #auth-panel textarea::placeholder { color: #cbd5e1 !important; }
+    #auth-panel .text-slate-500, #auth-panel .text-slate-400 { color: #cbd5e1 !important; }
+    #auth-panel .text-slate-600, #auth-panel .text-slate-700 { color: #e2e8f0 !important; }
+    #personnel-note {
+      background: rgba(99,102,241,.28) !important;
+      border-color: rgba(255,255,255,.3) !important;
+      color: #e0e7ff !important;
+    }
+    #back-to-portals, #link-to-register, #link-to-login {
+      color: #a5b4fc !important;
+    }
+    #back-to-portals:hover, #link-to-register:hover, #link-to-login:hover { color: #fff !important; }
+    #auth-panel .text-indigo-600 { color: #a5b4fc !important; }
+    #auth-panel .text-indigo-600:hover { color: #fff !important; }
+    /* Selects keep readable dropdown options */
+    #auth-panel select { background-color: rgba(255,255,255,.12) !important; color: #fff !important; }
+    select option { color: #e2e8f0; background-color: #1e293b; }
   </style>
 </head>
 <body class="text-slate-800 font-sans antialiased min-h-screen flex flex-col" style="background: radial-gradient(ellipse 80% 60% at 50% 30%, #2b2a8f 0%, #1a1865 45%, #0d0c3d 75%, #070724 100%);">
 
   <!-- Config Warning Banner -->
-  <div id="config-warning" class="hidden bg-amber-50 border-b border-amber-200 text-amber-800 p-3 text-xs text-center font-medium">
+  <div id="config-warning" class="hidden p-3 text-xs text-center font-medium bg-amber-500/15 border-b border-amber-400/40 text-amber-100">
     <i class="fa-solid fa-triangle-exclamation mr-1"></i> Supabase configuration missing. Ensure `supabase-config.js` is properly set up.
   </div>
 
@@ -109,29 +135,29 @@
       </div>
 
       <!-- Portal chooser: PERSONNEL (left) / STUDENT (right) -->
-      <div id="portal-chooser" class="grid md:grid-cols-2 gap-6 mb-2">
+      <div id="portal-chooser" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-2 w-full max-w-7xl mx-auto px-4 sm:px-6">
         <!-- LEFT: PERSONNEL — Login only -->
-        <div class="portal-card bg-white rounded-3xl shadow-xl p-7 text-center overflow-hidden">
+        <div class="portal-card bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-3xl p-7 text-center overflow-hidden transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
           <div class="flex justify-center mb-4">
             <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg shadow-indigo-500/40" style="background: linear-gradient(135deg, #6366f1, #312e81);">
               <i class="fa-solid fa-user-tie"></i>
             </div>
           </div>
-          <h2 class="font-extrabold tracking-widest text-sm text-indigo-900">PERSONNEL</h2>
-          <p class="text-xs text-slate-500 mt-1 mb-5">Teachers &amp; administrators sign in here.</p>
+          <h2 class="font-extrabold tracking-widest text-sm text-white text-center">PERSONNEL</h2>
+          <p class="text-xs text-slate-200 mt-1 mb-5 text-center">Teachers &amp; administrators sign in here.</p>
           <button id="portal-personnel-login" type="button" class="w-full py-2.5 rounded-xl font-semibold text-sm text-white transition hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" style="background: linear-gradient(90deg, #6366f1, #312e81);">
             Login
           </button>
         </div>
         <!-- RIGHT: STUDENT — Login + Create Account -->
-        <div class="portal-card bg-white rounded-3xl shadow-xl p-7 text-center overflow-hidden">
+        <div class="portal-card bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-3xl p-7 text-center overflow-hidden transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
           <div class="flex justify-center mb-4">
             <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg shadow-amber-500/40" style="background: linear-gradient(135deg, #fbbf24, #f59e0b);">
               <i class="fa-solid fa-graduation-cap"></i>
             </div>
           </div>
-          <h2 class="font-extrabold tracking-widest text-sm text-indigo-900">STUDENT</h2>
-          <p class="text-xs text-slate-500 mt-1 mb-5">Students sign in or create an account.</p>
+          <h2 class="font-extrabold tracking-widest text-sm text-white text-center">STUDENT</h2>
+          <p class="text-xs text-slate-200 mt-1 mb-5 text-center">Students sign in or create an account.</p>
           <div class="grid grid-cols-2 gap-2">
             <button id="portal-student-login" type="button" class="py-2.5 rounded-xl font-semibold text-sm text-white transition hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2" style="background: linear-gradient(90deg, #fbbf24, #f59e0b);">
               Login
@@ -289,9 +315,9 @@
 
     <!-- VIEW: APP DASHBOARD CONTAINER (Hidden until login) -->
     <section id="view-dashboard" class="w-full max-w-7xl hidden animate-fade-in">
-      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 text-center">
-        <h2 id="dashboard-title" class="text-xl font-bold mb-2 text-center">Dashboard</h2>
-        <p class="text-sm text-slate-500 text-center">Welcome to your portal view.</p>
+      <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-6 text-center transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30">
+        <h2 id="dashboard-title" class="text-xl font-bold mb-2 text-center text-white">Dashboard</h2>
+        <p class="text-sm text-slate-300 text-center">Welcome to your portal view.</p>
       </div>
     </section>
 
@@ -381,7 +407,7 @@
       if (window.__authBooted) return; // module init() ran fine
       var msg = document.getElementById('auth-message');
       if (!msg) return;
-      msg.className = 'mx-6 mb-6 border rounded-lg p-3 text-sm bg-rose-50 border border-rose-200 text-rose-700';
+      msg.className = 'mx-6 mb-6 border rounded-lg p-3 text-sm bg-rose-500/15 border-rose-400/40 text-rose-100';
       var hint = (location.protocol === 'file:')
         ? 'This page was opened directly as a file, so the login scripts could not start. Run it through a local server instead: `npx serve -l 5173 .` then open http://localhost:5173.'
         : 'The login scripts could not start (no internet connection or the Supabase CDN is blocked). The portal buttons above still work; Login/Register submit needs the backend scripts loaded. Check your connection and reload.';

@@ -39,9 +39,9 @@ function renderRegLevelFields() {
 
 function showMessage(text, kind = 'error') {
   const styles = {
-    error: 'bg-rose-50 border border-rose-200 text-rose-700',
-    success: 'bg-emerald-50 border border-emerald-200 text-emerald-700',
-    info: 'bg-indigo-50 border border-indigo-200 text-indigo-700'
+    error: 'bg-rose-500/15 border border-rose-400/40 text-rose-100',
+    success: 'bg-emerald-500/15 border border-emerald-400/40 text-emerald-100',
+    info: 'bg-indigo-500/15 border border-indigo-400/40 text-indigo-100'
   };
   msgBox.className = `mx-6 mb-6 border rounded-lg p-3 text-sm ${styles[kind]}`;
   msgBox.innerText = text;

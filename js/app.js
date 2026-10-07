@@ -462,7 +462,7 @@ function viewEvent(id) {
   const evt = Events.getEventById(id);
   if (!evt) return;
   document.getElementById('view-name').innerText = evt.name;
-  document.getElementById('view-venue').innerText = evt.venue || '-';
+  document.getElementById('view-venue').innerText = evt.venue || '—';
   document.getElementById('view-start').innerText = new Date(evt.start_datetime).toLocaleString();
   document.getElementById('view-end').innerText = evt.end_datetime ? new Date(evt.end_datetime).toLocaleString() : 'Open ended';
   document.getElementById('view-desc').innerText = evt.description || 'No description provided.';

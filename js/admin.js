@@ -64,9 +64,9 @@ export async function loadUsers({ silent = false } = {}) {
 
 function roleBadge(role) {
   const map = {
-    admin: 'bg-purple-100 text-purple-700',
-    teacher: 'bg-blue-100 text-blue-700',
-    student: 'bg-slate-100 text-slate-700'
+    admin: 'bg-purple-500/20 text-purple-200 border border-purple-400/30',
+    teacher: 'bg-blue-500/20 text-blue-200 border border-blue-400/30',
+    student: 'bg-white/15 text-slate-200 border border-white/25'
   };
   return `<span class="px-2.5 py-1 rounded-full text-xs font-semibold ${map[role] || ''}">${esc(role)}</span>`;
 }
@@ -381,7 +381,7 @@ export async function renderAdminOverview() {
   ]);
 
   if (eventsRes.error || attRes.error) {
-    box.innerHTML = `<p class="text-sm text-rose-600">${
+    box.innerHTML = `<p class="text-sm text-rose-300">${
       esc((eventsRes.error || attRes.error).message)}</p>`;
     return;
   }
@@ -483,7 +483,7 @@ export async function renderAdminEvents() {
     <tr class="hover:bg-white/5 transition-colors duration-200 align-middle">
       <td class="p-4 w-1/4 align-middle">
         <div class="font-semibold text-white whitespace-nowrap">${esc(e.name)}</div>
-        <div class="text-xs text-slate-300">${esc(e.venue || '-')}</div>
+        <div class="text-xs text-slate-300">${e.venue ? esc(e.venue) : ''}</div>
       </td>
       <td class="p-4 w-1/4 align-middle text-slate-300 text-sm whitespace-nowrap">${esc(fmtDateTime(e.start_datetime))}</td>
       <td class="p-4 w-1/4 align-middle">${statusBadge(e.status)}</td>

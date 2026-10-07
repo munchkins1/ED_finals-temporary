@@ -35,19 +35,21 @@
       background: linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent);
       animation: shineSweep 2.8s ease-in-out infinite;
     }
-    /* ---- Unified glassmorphism theme (matches landing page) ---- */
+    /* ---- Unified glassmorphism theme (matches landing page) — dark variants ---- */
     .glass {
-      background: rgba(255,255,255,.88);
+      background: rgba(255,255,255,.10);
       -webkit-backdrop-filter: blur(18px);
       backdrop-filter: blur(18px);
-      border: 1px solid rgba(255,255,255,.55);
+      border: 1px solid rgba(255,255,255,.22);
       box-shadow: 0 18px 45px rgba(0,0,0,.35);
+      color: #fff;
     }
     .glass-soft {
-      background: rgba(255,255,255,.55);
+      background: rgba(255,255,255,.08);
       -webkit-backdrop-filter: blur(14px);
       backdrop-filter: blur(14px);
-      border: 1px solid rgba(255,255,255,.45);
+      border: 1px solid rgba(255,255,255,.20);
+      color: #fff;
     }
     .glass-dark {
       background: rgba(15,15,60,.55);
@@ -123,20 +125,38 @@
     #app-main .border-slate-200 { border-color: rgba(255,255,255,.45) !important; }
     #app-main .border-slate-100 { border-color: rgba(255,255,255,.4) !important; }
     #app-main .border-b { border-color: rgba(255,255,255,.45) !important; }
-    /* Keep form controls solid + readable on top of glass */
+    /* Keep form controls glassy + readable on top of glass (uniform palette) */
     #app-main input, #app-main select, #app-main textarea,
     #event-modal input, #event-modal select, #event-modal textarea,
     #user-modal input, #user-modal select, #user-modal textarea,
     #event-view-modal input {
-      background-color: rgba(255,255,255,.96) !important;
-      color: #1e293b !important;
-      border-color: rgba(148,163,184,.5) !important;
+      background-color: rgba(255,255,255,.10) !important;
+      color: #fff !important;
+      border-color: rgba(255,255,255,.28) !important;
     }
-    #app-main input::placeholder, #app-main textarea::placeholder { color: #94a3b8; }
+    #app-main input::placeholder, #app-main textarea::placeholder,
+    #event-modal input::placeholder, #event-modal textarea::placeholder,
+    #user-modal input::placeholder, #user-modal textarea::placeholder { color: #cbd5e1 !important; }
+    #app-main input[readonly], #user-modal input[readonly] { color: #e2e8f0 !important; }
+    /* Selects carrying Tailwind's bg-white (option readability) stay glass too */
+    #app-main select.bg-white, #user-modal select.bg-white, #event-modal select.bg-white {
+      background-color: rgba(255,255,255,.10) !important;
+      color: #fff !important;
+      border-color: rgba(255,255,255,.28) !important;
+    }
+    select option { color: #e2e8f0; background-color: #1e293b; }
+    /* Global contrast: labels + legacy slate helper text on dark glass */
+    label { color: #cbd5e1 !important; }
+    .text-slate-400, .text-slate-500, .text-slate-600, .text-slate-700 { color: #cbd5e1 !important; }
+    /* QR backing stays solid white so codes always scan (beats the .bg-slate-50 rule) */
+    #event-qr-modal #event-qr-container { background: rgba(255,255,255,.94) !important; border-color: rgba(255,255,255,.35) !important; }
     /* Glass tables: crisp white text on frosted glass */
     #app-main table { color: #fff; }
-    #app-main thead th { color: #e2e8f0 !important; }
-    #app-main tbody td { color: #f1f5f9; }
+    #app-main thead th { color: #e2e8f0 !important; text-align: center; }
+    #app-main tbody td { color: #f1f5f9; text-align: center; vertical-align: middle; }
+    #app-main table th, #app-main table td { text-align: center; vertical-align: middle; }
+    /* Action cells: centered buttons with consistent spacing */
+    #app-main td .flex { justify-content: center; align-items: center; gap: .5rem; }
     /* Stat numbers pop on glass */
     #tab-dashboard h3 { color: #fff; }
     /* Buttons & action controls: smooth hover scale + glow everywhere */
@@ -161,9 +181,9 @@
       </div>
       <nav id="main-nav" class="hidden md:flex items-center space-x-2 text-sm font-medium"></nav>
       <div class="flex items-center gap-3">
-        <div class="text-right hidden sm:block">
-          <div id="current-user-name" class="text-white font-semibold text-sm">-</div>
-          <div id="current-user-role" class="text-xs uppercase tracking-wider text-indigo-300 bg-indigo-500/20 px-2.5 py-0.5 rounded-full inline-block mt-0.5">-</div>
+        <div class="hidden sm:flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-3 py-1.5 rounded-full">
+          <span id="current-user-name" class="text-white font-semibold text-sm whitespace-nowrap">-</span>
+          <span id="current-user-role" class="text-[11px] uppercase tracking-wider text-indigo-200 bg-indigo-500/25 border border-indigo-300/30 px-2 py-0.5 rounded-full whitespace-nowrap">-</span>
         </div>
         <button id="logout-btn" class="bg-white/15 hover:bg-white/25 border border-white/30 px-3 py-2 rounded-lg text-xs font-semibold backdrop-blur transition-all duration-200 ease-in-out hover:scale-[1.03] hover:shadow-lg hover:shadow-indigo-500/30 active:scale-95">
           <i class="fa-solid fa-right-from-bracket mr-1"></i>Logout
@@ -310,7 +330,7 @@
         <p id="qr-inline-meta" class="mt-4 font-semibold text-white text-center"></p>
         <p class="text-xs text-slate-300 mt-1 text-center">Event code:</p>
         <p id="qr-inline-token" class="text-xs font-mono text-slate-200 break-all px-4 text-center"></p>
-        <button id="download-inline-qr" class="mt-4 bg-slate-800 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-900 transition-all duration-200 ease-in-out hover:scale-[1.03] hover:shadow-lg hover:shadow-indigo-500/30 active:scale-95">
+        <button id="download-inline-qr" class="mt-4 bg-white/15 hover:bg-white/25 border border-white/30 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ease-in-out hover:scale-[1.03] hover:shadow-lg hover:shadow-indigo-500/30 active:scale-95">
           <i class="fa-solid fa-download mr-2"></i>Download QR
         </button>
       </div>
@@ -523,7 +543,7 @@
     <section id="tab-profile" class="tab-content hidden space-y-6 w-full max-w-7xl mx-auto px-4 sm:px-6">
       <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-6 text-center transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
         <h2 class="text-xl font-bold text-white text-center">My Profile</h2>
-        <p id="profile-subtitle" class="text-sm text-slate-500">View and update your personal information.</p>
+        <p id="profile-subtitle" class="text-sm text-slate-300 text-center">View and update your personal information.</p>
       </div>
 
       <!-- STUDENT: read-only profile card (staff uses the edit form below) -->
@@ -606,34 +626,17 @@
             </div>
           </div>
         </div>
-        <!-- Account Overview: centered 3-column metric cards -->
-        <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-6 transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
-          <h3 class="text-lg font-bold text-white text-center">Account Overview</h3>
-          <p class="text-sm text-slate-300 text-center mb-4">Your role, attendance count, and account age at a glance.</p>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="rounded-2xl border border-white/20 bg-white/10 p-4 text-center">
-              <div class="text-2xl text-center">🛡️</div>
-              <p class="text-xs font-semibold uppercase tracking-wider text-slate-300 text-center mt-2">Account Role</p>
-              <p id="role-display" class="text-lg font-bold text-white text-center">Student</p>
-            </div>
-            <div class="rounded-2xl border border-white/20 bg-white/10 p-4 text-center">
-              <div class="text-2xl text-center">📅</div>
-              <p class="text-xs font-semibold uppercase tracking-wider text-slate-300 text-center mt-2">Total Events</p>
-              <p id="events-attended-display" class="text-lg font-bold text-white text-center">2</p>
-            </div>
-            <div class="rounded-2xl border border-white/20 bg-white/10 p-4 text-center">
-              <div class="text-2xl text-center">🕒</div>
-              <p class="text-xs font-semibold uppercase tracking-wider text-slate-300 text-center mt-2">Account Created</p>
-              <p id="created-date-display" class="text-lg font-bold text-white text-center">October 7, 2026</p>
-            </div>
-          </div>
-        </div>
       </div>
+      </div>
+      <!-- #profile-student-view closes here so the form + stats below are its
+           SIBLINGS (not children): the form must be visible to staff even while
+           the student card is hidden. -->
+      <!-- Account Overview lives once below (#profile-stats), shown for all roles. -->
       <div id="profile-form-view" class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-6 max-w-2xl w-full transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
         <form id="profile-form" class="space-y-4">
           <div>
             <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Email (read only)</label>
-            <input id="profile-email" name="email" type="email" readonly class="w-full border border-slate-200 bg-slate-50 rounded-lg p-2 text-sm">
+            <input id="profile-email" name="email" type="email" readonly class="w-full border border-white/20 bg-white/10 rounded-lg p-2 text-sm text-slate-200">
           </div>
           <div>
             <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Full name</label>
@@ -701,14 +704,26 @@
         </form>
       </div>
 
-      <!-- Live stats & metadata (all roles) -->
-      <div id="profile-stats" class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-6 max-w-2xl w-full transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
+      <!-- Live stats & metadata (all roles) — single Account Overview, full width -->
+      <div id="profile-stats" class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-3xl p-6 w-full transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
         <h3 class="text-lg font-bold mb-1 text-white text-center">Account Overview</h3>
-        <p class="text-sm text-slate-300 mb-4 text-center">Your role, attendance count and account age at a glance.</p>
-        <div class="p-4 bg-white/10 rounded-2xl border border-white/20 space-y-1.5 text-center">
-          <p class="text-sm text-slate-200"><span class="font-semibold text-white">Account Role:</span> <span data-role-display>-</span></p>
-          <p class="text-sm text-slate-200"><span class="font-semibold text-white">Total Events Attended:</span> <span data-events-display>0</span></p>
-          <p class="text-sm text-slate-200"><span class="font-semibold text-white">Account Created:</span> <span data-created-display>N/A</span></p>
+        <p class="text-sm text-slate-300 mb-5 text-center">Your role, attendance count and account age at a glance.</p>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="rounded-2xl border border-white/20 bg-white/10 p-4 text-center">
+            <div class="text-2xl text-center">🛡️</div>
+            <p class="text-xs font-semibold uppercase tracking-wider text-slate-300 text-center mt-2">Account Role</p>
+            <p class="text-lg font-bold text-white text-center" data-role-display>-</p>
+          </div>
+          <div class="rounded-2xl border border-white/20 bg-white/10 p-4 text-center">
+            <div class="text-2xl text-center">📅</div>
+            <p class="text-xs font-semibold uppercase tracking-wider text-slate-300 text-center mt-2">Total Events Attended</p>
+            <p class="text-lg font-bold text-white text-center" data-events-display>0</p>
+          </div>
+          <div class="rounded-2xl border border-white/20 bg-white/10 p-4 text-center">
+            <div class="text-2xl text-center">🕒</div>
+            <p class="text-xs font-semibold uppercase tracking-wider text-slate-300 text-center mt-2">Account Created</p>
+            <p class="text-lg font-bold text-white text-center" data-created-display>N/A</p>
+          </div>
         </div>
       </div>
     </section>
@@ -769,8 +784,8 @@
         <div class="flex justify-between"><dt class="text-slate-500">Start</dt><dd id="view-start" class="font-medium text-right"></dd></div>
         <div class="flex justify-between"><dt class="text-slate-500">End</dt><dd id="view-end" class="font-medium text-right"></dd></div>
       </dl>
-      <p class="mt-4 text-sm text-slate-600 bg-slate-50 rounded-lg p-3 border border-slate-200" id="view-desc"></p>
-      <button id="close-view-modal" class="mt-4 w-full py-2 bg-slate-800 text-white rounded-lg text-sm font-medium hover:bg-slate-900">Close</button>
+      <p class="mt-4 text-sm text-slate-200 bg-white/10 border border-white/20 rounded-lg p-3" id="view-desc"></p>
+      <button id="close-view-modal" class="mt-4 w-full py-2 bg-white/15 hover:bg-white/25 border border-white/30 text-white rounded-lg text-sm font-medium transition-all duration-200 ease-in-out hover:scale-[1.03] active:scale-95">Close</button>
     </div>
   </div>
 
@@ -784,7 +799,7 @@
       <p class="text-xs text-slate-500">Event code:</p>
       <p id="event-qr-token" class="text-xs font-mono text-slate-600 break-all"></p>
       <div class="flex gap-2 pt-1">
-        <button id="event-qr-download" class="flex-1 py-2 bg-slate-800 text-white rounded-lg text-sm font-medium hover:bg-slate-900 transition-all duration-200 ease-in-out hover:scale-[1.03] hover:shadow-lg hover:shadow-indigo-500/30 active:scale-95"><i class="fa-solid fa-download mr-1"></i>Download</button>
+        <button id="event-qr-download" class="flex-1 py-2 bg-white/15 hover:bg-white/25 border border-white/30 text-white rounded-lg text-sm font-medium transition-all duration-200 ease-in-out hover:scale-[1.03] hover:shadow-lg hover:shadow-indigo-500/30 active:scale-95"><i class="fa-solid fa-download mr-1"></i>Download</button>
         <button id="close-event-qr" class="flex-1 py-2 border border-white/30 text-white rounded-lg text-sm font-medium hover:bg-white/10 transition-all duration-200 ease-in-out hover:scale-[1.03] active:scale-95">Close</button>
       </div>
     </div>
@@ -812,7 +827,7 @@
           </div>
           <div>
             <label for="modal-user-email" class="block text-xs font-semibold uppercase text-slate-500 mb-1">Email (sign-in, read only)</label>
-            <input id="modal-user-email" type="text" readonly class="w-full border border-slate-200 bg-slate-50 rounded-lg p-2 text-sm text-slate-500" placeholder="Not set">
+            <input id="modal-user-email" type="text" readonly class="w-full border border-white/20 bg-white/10 rounded-lg p-2 text-sm text-slate-200" placeholder="Not set">
             <p class="mt-1 text-xs text-slate-400">The sign-in address lives in Supabase Auth; only the account owner can change it.</p>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
