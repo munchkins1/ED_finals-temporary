@@ -35,16 +35,16 @@ export async function renderMyAttendance() {
   if (sc) {
     sc.innerHTML = `
       <div class="grid grid-cols-3 gap-3">
-        <div class="glass rounded-xl p-4 text-center">
+        <div class="bg-indigo-500/15 border border-indigo-400/30 backdrop-blur-md rounded-xl p-4 text-center">
           <div class="text-2xl font-bold text-indigo-300">${total}</div>
           <div class="text-xs text-slate-400 uppercase font-semibold">Events attended</div>
         </div>
-        <div class="glass rounded-xl p-4 text-center">
+        <div class="bg-emerald-500/15 border border-emerald-400/30 backdrop-blur-md rounded-xl p-4 text-center">
           <div class="text-2xl font-bold text-emerald-300">${present}</div>
           <div class="text-xs text-slate-400 uppercase font-semibold">Present</div>
         </div>
-        <div class="glass rounded-xl p-4 text-center">
-          <div class="text-2xl font-bold text-white">${rate}%</div>
+        <div class="bg-amber-500/15 border border-amber-400/30 backdrop-blur-md rounded-xl p-4 text-center">
+          <div class="text-2xl font-bold text-amber-300">${rate}%</div>
           <div class="text-xs text-slate-400 uppercase font-semibold">Attendance rate</div>
         </div>
       </div>`;
@@ -163,17 +163,17 @@ function renderRecordsSummary(rows) {
   if (!box) return;
   const counts = { present: 0, late: 0, absent: 0, excused: 0 };
   rows.forEach(r => { counts[r.status] = (counts[r.status] || 0) + 1; });
-  const card = (label, val, color) => `
-    <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-4 text-center transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
+  const card = (label, val, color, tint, extra = '') => `
+    <div class="bg-${tint}-500/15 border border-${tint}-400/30 backdrop-blur-md shadow-2xl rounded-2xl p-4 text-center transition-all duration-300 ease-in-out hover:bg-${tint}-500/25 hover:-translate-y-1 ${extra}">
       <div class="text-2xl font-bold ${color} text-center">${val}</div>
       <div class="text-xs text-slate-300 uppercase font-semibold text-center">${label}</div>
     </div>`;
-  box.innerHTML = `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-    ${card('Total', rows.length, 'text-indigo-200')}
-    ${card('Present', counts.present, 'text-emerald-300')}
-    ${card('Late', counts.late, 'text-amber-300')}
-    ${card('Absent', counts.absent, 'text-rose-300')}
-    ${card('Excused', counts.excused, 'text-blue-300')}
+  box.innerHTML = `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+    ${card('Total', rows.length, 'text-indigo-200', 'indigo')}
+    ${card('Present', counts.present, 'text-emerald-300', 'emerald')}
+    ${card('Late', counts.late, 'text-amber-300', 'amber')}
+    ${card('Absent', counts.absent, 'text-rose-300', 'rose')}
+    ${card('Excused', counts.excused, 'text-blue-300', 'blue', 'sm:col-span-2 lg:col-span-1 justify-self-center')}
   </div>`;
 }
 

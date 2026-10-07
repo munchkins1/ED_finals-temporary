@@ -48,9 +48,9 @@ function showResult(kind, message, eventName) {
     error:        { bg: 'bg-rose-500/15 border-rose-400/40 text-rose-100',          icon: 'fa-triangle-exclamation', label: 'Error' }
   };
   const c = map[kind] || map.error;
-  box.className = `mt-4 border rounded-lg p-4 text-sm ${c.bg}`;
+  box.className = `mt-4 border rounded-lg p-4 text-sm text-center ${c.bg}`;
   box.innerHTML = `
-    <div class="font-semibold flex items-center gap-2"><i class="fa-solid ${c.icon}"></i>${esc(c.label)}</div>
+    <div class="font-semibold flex items-center justify-center gap-2"><i class="fa-solid ${c.icon}"></i>${esc(c.label)}</div>
     <div class="mt-1">${esc(message || '')}${eventName ? ` (${esc(eventName)})` : ''}</div>`;
   box.classList.remove('hidden');
   const t = { success: 'success', duplicate: 'warning', closed: 'warning', invalid: 'error', unauthorized: 'error', error: 'error' }[kind] || 'info';

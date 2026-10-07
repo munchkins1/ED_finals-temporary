@@ -121,9 +121,14 @@ function inferEducationalLevel(u) {
 
 /** Build the labelled Student ID / Course / Year / Block ... block for one row. */
 function renderUserDetails(u) {
+  // Staff accounts hold no student details: show a single "-" instead of a
+  // "Student ID: Not set" block (registrar request, see Details column).
+  if (u.role !== 'student') {
+    return '<div class="text-center text-slate-400 font-medium">-</div>';
+  }
   const level  = inferEducationalLevel(u);
   const parsed = parseGradeClass(u.grade_class);
-  const set    = v => String(v || '').trim() || 'Not set';
+  const set    = v => String(v || '').trim() || '-';
   const year   = String(u.year_level || parsed.year || '').trim();
   // `department` mirrors `course` on modern rows, but legacy accounts store
   // free text there ("College Department" / "Senior High"), so it is only
@@ -194,7 +199,7 @@ export function renderUsers() {
           <select data-role-user="${u.id}" ${isSelf ? 'disabled' : ''} class="text-xs border border-white/20 bg-white/10 text-white rounded px-2 py-1 transition-all duration-200 ease-in-out ${isSelf ? 'opacity-50' : ''}">${roleOpts}</select>
           <button data-edit-user="${u.id}" class="px-2.5 py-1 text-xs bg-indigo-500/20 text-indigo-200 rounded hover:bg-indigo-500/30 font-medium transition-all duration-200 ease-in-out hover:scale-[1.03] active:scale-95">Edit</button>
           <button data-toggle-active="${u.id}" data-active="${u.is_active}" ${isSelf ? 'disabled' : ''}
-            class="px-2.5 py-1 text-xs rounded font-medium transition-all duration-200 ease-in-out hover:scale-[1.03] active:scale-95 ${isSelf ? 'bg-white/10 text-slate-400 cursor-not-allowed' : (u.is_active ? 'bg-amber-500/20 text-amber-200 hover:bg-amber-500/30' : 'bg-emerald-500/20 text-emerald-200 hover:bg-emerald-500/30')}">
+            class="px-2.5 py-1 text-xs rounded font-medium transition-all duration-200 ease-in-out hover:scale-[1.03] active:scale-95 ${isSelf ? 'bg-white/10 text-slate-400 cursor-not-allowed' : (u.is_active ? 'bg-rose-500/20 text-rose-200 hover:bg-rose-500/30' : 'bg-emerald-500/20 text-emerald-200 hover:bg-emerald-500/30')}">
             ${u.is_active ? 'Deactivate' : 'Activate'}
           </button>
         </td>
@@ -585,17 +590,17 @@ function renderAdminRecordsSummary(rows) {
   if (!box) return;
   const counts = { present: 0, late: 0, absent: 0, excused: 0 };
   rows.forEach(r => { counts[r.status] = (counts[r.status] || 0) + 1; });
-  const card = (label, val, color) => `
-    <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-4 text-center transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
+  const card = (label, val, color, tint, extra = '') => `
+    <div class="bg-${tint}-500/15 border border-${tint}-400/30 backdrop-blur-md shadow-2xl rounded-2xl p-4 text-center transition-all duration-300 ease-in-out hover:bg-${tint}-500/25 hover:-translate-y-1 ${extra}">
       <div class="text-2xl font-bold ${color} text-center">${val}</div>
       <div class="text-xs text-slate-300 uppercase font-semibold text-center">${label}</div>
     </div>`;
-  box.innerHTML = `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-    ${card('Total', rows.length, 'text-indigo-200')}
-    ${card('Present', counts.present, 'text-emerald-300')}
-    ${card('Late', counts.late, 'text-amber-300')}
-    ${card('Absent', counts.absent, 'text-rose-300')}
-    ${card('Excused', counts.excused, 'text-blue-300')}
+  box.innerHTML = `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+    ${card('Total', rows.length, 'text-indigo-200', 'indigo')}
+    ${card('Present', counts.present, 'text-emerald-300', 'emerald')}
+    ${card('Late', counts.late, 'text-amber-300', 'amber')}
+    ${card('Absent', counts.absent, 'text-rose-300', 'rose')}
+    ${card('Excused', counts.excused, 'text-blue-300', 'blue', 'sm:col-span-2 lg:col-span-1 justify-self-center')}
   </div>`;
 }
 

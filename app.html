@@ -157,6 +157,9 @@
     #app-main table th, #app-main table td { text-align: center; vertical-align: middle; }
     /* Action cells: centered buttons with consistent spacing */
     #app-main td .flex { justify-content: center; align-items: center; gap: .5rem; }
+    /* Space between action buttons/selects inside any table cell */
+    #app-main td button + button, #app-main td button + select,
+    #app-main td select + button, #app-main td select + select { margin-left: .5rem; }
     /* Stat numbers pop on glass */
     #tab-dashboard h3 { color: #fff; }
     /* Buttons & action controls: smooth hover scale + glow everywhere */
@@ -180,7 +183,7 @@
         </div>
       </div>
       <nav id="main-nav" class="hidden md:flex items-center space-x-2 text-sm font-medium"></nav>
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-3 ml-auto shrink-0">
         <div class="hidden sm:flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-3 py-1.5 rounded-full">
           <span id="current-user-name" class="text-white font-semibold text-sm whitespace-nowrap">-</span>
           <span id="current-user-role" class="text-[11px] uppercase tracking-wider text-indigo-200 bg-indigo-500/25 border border-indigo-300/30 px-2 py-0.5 rounded-full whitespace-nowrap">-</span>
@@ -403,19 +406,19 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-4 text-center transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
           <p class="text-xs text-slate-300 uppercase font-semibold text-center">Total check-ins</p>
-          <h3 id="stat-checkins2" class="text-2xl font-bold text-white text-center">-</h3>
+          <h3 id="stat-checkins2" class="text-2xl font-bold text-indigo-300 text-center">-</h3>
         </div>
         <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-4 text-center transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
           <p class="text-xs text-slate-300 uppercase font-semibold text-center">Check-ins today</p>
-          <h3 id="stat-today2" class="text-2xl font-bold text-white text-center">-</h3>
+          <h3 id="stat-today2" class="text-2xl font-bold text-emerald-300 text-center">-</h3>
         </div>
         <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-4 text-center transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
           <p class="text-xs text-slate-300 uppercase font-semibold text-center">Events</p>
-          <h3 id="stat-events2" class="text-2xl font-bold text-white text-center">-</h3>
+          <h3 id="stat-events2" class="text-2xl font-bold text-amber-300 text-center">-</h3>
         </div>
         <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-4 text-center transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
           <p class="text-xs text-slate-300 uppercase font-semibold text-center">Open events</p>
-          <h3 id="stat-open2" class="text-2xl font-bold text-white text-center">-</h3>
+          <h3 id="stat-open2" class="text-2xl font-bold text-sky-300 text-center">-</h3>
         </div>
       </div>
 
