@@ -168,7 +168,7 @@ function renderRecordsSummary(rows) {
       <div class="text-2xl font-bold ${color} text-center">${val}</div>
       <div class="text-xs text-slate-100 uppercase font-semibold text-center">${label}</div>
     </div>`;
-  box.innerHTML = `<div class="grid grid-cols-5 gap-4">
+  box.innerHTML = `<div class="grid grid-cols-4 lg:grid-cols-5 gap-4">
     ${card('Total', rows.length, 'text-white')}
     ${card('Present', counts.present, 'text-emerald-400')}
     ${card('Late', counts.late, 'text-amber-400')}

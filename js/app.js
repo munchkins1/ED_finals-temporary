@@ -244,7 +244,7 @@ function renderNav() {
     );
     // Admin's five tabs stack as two balanced rows (2 + 3) instead of one line.
     if (links.length > 4) {
-      links.splice(2, 0, '<span aria-hidden="true" style="flex-basis:100%"></span>');
+      links.splice(2, 0, '<span aria-hidden="true" style="flex-basis:100%;height:0;line-height:0;margin:0;padding:0"></span>');
     }
     nav.innerHTML = links.join('');
   }
