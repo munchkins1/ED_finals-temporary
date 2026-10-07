@@ -92,12 +92,15 @@ export function renderEvents() {
   if (!tbody) return;
   // Role-based access: teachers keep View/QR/Edit/Close, admins also get Delete.
   const isAdmin = profile && profile.role === 'admin';
-  const list = visibleEvents();
+  const term = (document.getElementById('event-search')?.value || '').toLowerCase().trim();
+  const list = visibleEvents().filter(e => !term || (e.name || '').toLowerCase().includes(term));
 
   if (list.length === 0) {
-    tableMessage(tbody, 4, profile && profile.role === 'student'
-      ? 'No events are currently open for check-in.'
-      : 'No events yet. Click "Create Event" to add one.');
+    tableMessage(tbody, 4, term
+      ? 'No events match your search.'
+      : profile && profile.role === 'student'
+        ? 'No events are currently open for check-in.'
+        : 'No events yet. Click "Create Event" to add one.');
     return;
   }
   tbody.innerHTML = list.map(renderEventRow).join('');
