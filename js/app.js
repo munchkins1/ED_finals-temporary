@@ -452,6 +452,7 @@ function wireGlobalHandlers() {
 
 async function doLogout() {
   if (Scan.isScanning()) await Scan.stopScanner();
+  try { localStorage.setItem('campusqr-toast', JSON.stringify({ message: 'Signed out successfully.', type: 'success' })); } catch { /* storage unavailable */ }
   await signOut();
   location.replace('index.html');
 }
@@ -624,6 +625,8 @@ function fillProfileForm() {
     ro('student-number-input', profile.student_no);
     tx('student-card-name', profile.full_name);
     tx('student-card-id', profile.student_no);
+    // Colorful avatar initial mirrors the centered left-column design.
+    const avatar = document.getElementById('student-avatar');
     renderProfileEducation();
     renderProfileStats();
     return;
@@ -661,21 +664,22 @@ function fillProfileForm() {
 /** Live stats card: role, account age and an RLS-scoped check-in count. */
 async function renderProfileStats() {
   if (!profile) return;
-  const roleEl = document.getElementById('role-display');
-  if (roleEl) roleEl.innerText = ROLE_LABEL[profile.role] || profile.role;
-  const createdEl = document.getElementById('created-date-display');
-  if (createdEl && profile.created_at) {
-    createdEl.innerText = new Date(profile.created_at).toLocaleDateString('en-US', {
+  const roleEls = document.querySelectorAll('#role-display, [data-role-display]');
+  roleEls.forEach(el => { el.innerText = ROLE_LABEL[profile.role] || profile.role; });
+  const createdEls = document.querySelectorAll('#created-date-display, [data-created-display]');
+  if (profile.created_at) {
+    const dateStr = new Date(profile.created_at).toLocaleDateString('en-US', {
       year: 'numeric', month: 'long', day: 'numeric'
     });
+    createdEls.forEach(el => { el.innerText = dateStr; });
   }
-  const countEl = document.getElementById('events-attended-display');
-  if (!countEl) return;
+  const countEls = document.querySelectorAll('#events-attended-display, [data-events-display]');
+  if (countEls.length === 0) return;
   const { count, error } = await supabase
     .from('attendance').select('*', { count: 'exact', head: true })
     .eq('student_id', profile.id);
   if (error) { console.error('renderProfileStats', error); return; }
-  countEl.innerText = count || 0;
+  countEls.forEach(el => { el.innerText = count || 0; });
 }
 
 async function saveProfile(e) {

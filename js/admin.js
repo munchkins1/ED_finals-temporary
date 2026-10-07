@@ -178,23 +178,23 @@ export function renderUsers() {
     const roleOpts = ['student', 'teacher', 'admin'].map(r =>
       `<option value="${r}" ${r === u.role ? 'selected' : ''}>${r}</option>`).join('');
     return `
-      <tr class="hover:bg-slate-50">
-        <td class="p-4">
-          <div class="font-semibold">${esc(u.full_name || '(no name)')}</div>
-          <div class="text-xs text-slate-500">${esc(u.email)}</div>
+      <tr class="hover:bg-white/5 transition-colors duration-200 align-middle">
+        <td class="p-4 w-1/5 align-middle">
+          <div class="font-semibold text-white">${esc(u.full_name || '(no name)')}</div>
+          <div class="text-xs text-slate-300">${esc(u.email)}</div>
         </td>
-        <td class="p-4">${renderUserDetails(u)}</td>
-        <td class="p-4">${roleBadge(u.role)}</td>
-        <td class="p-4">
+        <td class="p-4 w-1/5 align-middle">${renderUserDetails(u)}</td>
+        <td class="p-4 w-1/5 align-middle">${roleBadge(u.role)}</td>
+        <td class="p-4 w-1/5 align-middle">
           ${u.is_active
-            ? '<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">Active</span>'
-            : '<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-100 text-rose-700">Inactive</span>'}
+            ? '<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-200">Active</span>'
+            : '<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-500/20 text-rose-200">Inactive</span>'}
         </td>
-        <td class="p-4 text-right space-x-1 whitespace-nowrap">
-          <select data-role-user="${u.id}" ${isSelf ? 'disabled' : ''} class="text-xs border border-slate-300 rounded px-2 py-1 ${isSelf ? 'opacity-50' : ''}">${roleOpts}</select>
-          <button data-edit-user="${u.id}" class="px-2.5 py-1 text-xs bg-indigo-50 text-indigo-600 rounded hover:bg-indigo-100 font-medium">Edit</button>
+        <td class="p-4 w-1/5 align-middle text-right whitespace-nowrap">
+          <select data-role-user="${u.id}" ${isSelf ? 'disabled' : ''} class="text-xs border border-white/20 bg-white/10 text-white rounded px-2 py-1 transition-all duration-200 ease-in-out ${isSelf ? 'opacity-50' : ''}">${roleOpts}</select>
+          <button data-edit-user="${u.id}" class="px-2.5 py-1 text-xs bg-indigo-500/20 text-indigo-200 rounded hover:bg-indigo-500/30 font-medium transition-all duration-200 ease-in-out hover:scale-[1.03] active:scale-95">Edit</button>
           <button data-toggle-active="${u.id}" data-active="${u.is_active}" ${isSelf ? 'disabled' : ''}
-            class="px-2.5 py-1 text-xs rounded font-medium ${isSelf ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : (u.is_active ? 'bg-amber-50 text-amber-700 hover:bg-amber-100' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100')}">
+            class="px-2.5 py-1 text-xs rounded font-medium transition-all duration-200 ease-in-out hover:scale-[1.03] active:scale-95 ${isSelf ? 'bg-white/10 text-slate-400 cursor-not-allowed' : (u.is_active ? 'bg-amber-500/20 text-amber-200 hover:bg-amber-500/30' : 'bg-emerald-500/20 text-emerald-200 hover:bg-emerald-500/30')}">
             ${u.is_active ? 'Deactivate' : 'Activate'}
           </button>
         </td>
@@ -413,33 +413,33 @@ export async function renderAdminOverview() {
   attendance.forEach(a => { totals[a.status] = (totals[a.status] || 0) + 1; });
 
   box.innerHTML = `
-    <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-5">
-      ${card('Events', events.length, 'text-indigo-600')}
-      ${card('Check-ins', attendance.length, 'text-indigo-600')}
-      ${card('Present', totals.present, 'text-emerald-600')}
-      ${card('Late', totals.late, 'text-amber-600')}
-      ${card('Absent', totals.absent, 'text-rose-600')}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
+      ${card('Events', events.length, 'text-indigo-200')}
+      ${card('Check-ins', attendance.length, 'text-indigo-200')}
+      ${card('Present', totals.present, 'text-emerald-300')}
+      ${card('Late', totals.late, 'text-amber-300')}
+      ${card('Absent', totals.absent, 'text-rose-300')}
     </div>
-    <div class="overflow-x-auto">
+    <div class="w-full overflow-x-auto">
       <table class="w-full text-left border-collapse text-sm min-w-[520px]">
-        <thead class="bg-slate-100 text-slate-600 uppercase text-xs">
-          <tr>
-            <th class="p-3">Event</th>
-            <th class="p-3">Status</th>
-            <th class="p-3">Date</th>
-            <th class="p-3 text-right">Check-ins</th>
-            <th class="p-3 text-right">Attended</th>
+        <thead class="bg-white/10 text-slate-200 uppercase text-xs">
+          <tr class="hover:bg-white/5 transition-colors duration-200">
+            <th class="p-3 flex-1 align-middle">Event</th>
+            <th class="p-3 flex-1 align-middle">Status</th>
+            <th class="p-3 flex-1 align-middle">Date</th>
+            <th class="p-3 flex-1 align-middle text-right">Check-ins</th>
+            <th class="p-3 flex-1 align-middle text-right">Attended</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-slate-200">
+        <tbody class="divide-y divide-white/10">
           ${events.map(e => {
             const b = byEvent.get(e.id) || { total: 0, present: 0 };
-            return `<tr class="hover:bg-slate-50">
-              <td class="p-3 font-medium">${esc(e.name)}</td>
-              <td class="p-3">${statusBadge(e.status)}</td>
-              <td class="p-3 text-slate-500">${esc(fmtDateTime(e.start_datetime))}</td>
-              <td class="p-3 text-right">${b.total}</td>
-              <td class="p-3 text-right text-emerald-600 font-semibold">${b.present}</td>
+            return `<tr class="hover:bg-white/5 transition-colors duration-200 align-middle">
+              <td class="p-3 flex-1 align-middle font-medium text-white whitespace-nowrap">${esc(e.name)}</td>
+              <td class="p-3 flex-1 align-middle">${statusBadge(e.status)}</td>
+              <td class="p-3 flex-1 align-middle text-slate-300 whitespace-nowrap">${esc(fmtDateTime(e.start_datetime))}</td>
+              <td class="p-3 flex-1 align-middle text-right text-white">${b.total}</td>
+              <td class="p-3 flex-1 align-middle text-right text-emerald-300 font-semibold">${b.present}</td>
             </tr>`;
           }).join('')}
         </tbody>
@@ -480,26 +480,26 @@ export async function renderAdminEvents() {
   }
 
   tbody.innerHTML = rows.map(e => `
-    <tr class="hover:bg-slate-50 align-top">
-      <td class="p-4">
-        <div class="font-semibold text-slate-800">${esc(e.name)}</div>
-        <div class="text-xs text-slate-500">${esc(e.venue || '-')}</div>
+    <tr class="hover:bg-white/5 transition-colors duration-200 align-middle">
+      <td class="p-4 w-1/4 align-middle">
+        <div class="font-semibold text-white whitespace-nowrap">${esc(e.name)}</div>
+        <div class="text-xs text-slate-300">${esc(e.venue || '-')}</div>
       </td>
-      <td class="p-4 text-slate-600 text-sm">${esc(fmtDateTime(e.start_datetime))}</td>
-      <td class="p-4">${statusBadge(e.status)}</td>
-      <td class="p-4 text-right">
+      <td class="p-4 w-1/4 align-middle text-slate-300 text-sm whitespace-nowrap">${esc(fmtDateTime(e.start_datetime))}</td>
+      <td class="p-4 w-1/4 align-middle">${statusBadge(e.status)}</td>
+      <td class="p-4 w-1/4 align-middle text-right">
         <div class="inline-flex items-center gap-1 whitespace-nowrap justify-end">
           <button data-admin-act="qr" data-id="${e.id}"
-            class="px-2.5 py-1 text-xs bg-purple-50 text-purple-600 rounded hover:bg-purple-100 font-medium">QR</button>
+            class="px-2.5 py-1 text-xs bg-purple-500/20 text-purple-200 rounded hover:bg-purple-500/30 font-medium transition-all duration-200 ease-in-out hover:scale-[1.03] active:scale-95">QR</button>
           <button data-admin-act="edit" data-id="${e.id}"
-            class="px-2.5 py-1 text-xs bg-indigo-50 text-indigo-600 rounded hover:bg-indigo-100 font-medium">Edit</button>
+            class="px-2.5 py-1 text-xs bg-indigo-500/20 text-indigo-200 rounded hover:bg-indigo-500/30 font-medium transition-all duration-200 ease-in-out hover:scale-[1.03] active:scale-95">Edit</button>
           ${e.status === 'open'
             ? `<button data-admin-act="close" data-id="${e.id}"
-                 class="px-2.5 py-1 text-xs bg-amber-50 text-amber-700 rounded hover:bg-amber-100 font-medium">Close</button>`
+                 class="px-2.5 py-1 text-xs bg-amber-500/20 text-amber-200 rounded hover:bg-amber-500/30 font-medium transition-all duration-200 ease-in-out hover:scale-[1.03] active:scale-95">Close</button>`
             : `<button data-admin-act="open" data-id="${e.id}"
-                 class="px-2.5 py-1 text-xs bg-emerald-50 text-emerald-700 rounded hover:bg-emerald-100 font-medium">Open</button>`}
+                 class="px-2.5 py-1 text-xs bg-emerald-500/20 text-emerald-200 rounded hover:bg-emerald-500/30 font-medium transition-all duration-200 ease-in-out hover:scale-[1.03] active:scale-95">Open</button>`}
           <button data-admin-act="del" data-id="${e.id}"
-            class="px-2.5 py-1 text-xs bg-rose-50 text-rose-600 rounded hover:bg-rose-100 font-medium">Delete</button>
+            class="px-2.5 py-1 text-xs bg-rose-500/20 text-rose-200 rounded hover:bg-rose-500/30 font-medium transition-all duration-200 ease-in-out hover:scale-[1.03] active:scale-95">Delete</button>
         </div>
       </td>
     </tr>`).join('');
@@ -561,20 +561,20 @@ export async function renderAdminRecords() {
     const studentNo = r.student?.student_no || r.profiles?.student_no || '';
     const gradeClass = r.student?.grade_class || r.profiles?.grade_class || '';
     return `
-      <tr class="hover:bg-slate-50 align-top">
-        <td class="p-4">
-          <div class="font-semibold">${esc(studentName)}</div>
-          <div class="text-xs text-slate-500">${esc(studentNo)} ${esc(gradeClass)}</div>
+      <tr class="hover:bg-white/5 transition-colors duration-200 align-middle">
+        <td class="p-4 w-1/5 align-middle">
+          <div class="font-semibold text-white">${esc(studentName)}</div>
+          <div class="text-xs text-slate-300">${esc(studentNo)} ${esc(gradeClass)}</div>
         </td>
-        <td class="p-4 text-slate-600">${esc(r.events?.name || '-')}</td>
-        <td class="p-4">
+        <td class="p-4 w-1/5 align-middle text-slate-200">${esc(r.events?.name || '-')}</td>
+        <td class="p-4 w-1/5 align-middle">
           <select data-admin-status="${r.id}"
-            class="text-xs border border-slate-300 rounded px-2 py-1 focus:ring-2 focus:ring-indigo-500 focus:outline-none">${opts}</select>
+            class="text-xs border border-white/20 bg-white/10 text-white rounded px-2 py-1 focus:ring-2 focus:ring-indigo-400 focus:outline-none transition-all duration-200 ease-in-out">${opts}</select>
         </td>
-        <td class="p-4 text-slate-500 text-sm">${esc(fmtDateTime(r.recorded_at))}</td>
-        <td class="p-4 text-right">
+        <td class="p-4 w-1/5 align-middle text-slate-300 text-sm">${esc(fmtDateTime(r.recorded_at))}</td>
+        <td class="p-4 w-1/5 align-middle text-right">
           <button data-admin-del-record="${r.id}"
-            class="px-2.5 py-1 text-xs bg-rose-50 text-rose-600 rounded hover:bg-rose-100 font-medium whitespace-nowrap">Delete</button>
+            class="px-2.5 py-1 text-xs bg-rose-500/20 text-rose-200 rounded hover:bg-rose-500/30 font-medium whitespace-nowrap transition-all duration-200 ease-in-out hover:scale-[1.03] active:scale-95">Delete</button>
         </td>
       </tr>`;
   }).join('');
@@ -586,16 +586,16 @@ function renderAdminRecordsSummary(rows) {
   const counts = { present: 0, late: 0, absent: 0, excused: 0 };
   rows.forEach(r => { counts[r.status] = (counts[r.status] || 0) + 1; });
   const card = (label, val, color) => `
-    <div class="glass rounded-xl p-4 text-center">
-      <div class="text-2xl font-bold ${color}">${val}</div>
-      <div class="text-xs text-slate-500 uppercase font-semibold">${label}</div>
+    <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-4 text-center transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
+      <div class="text-2xl font-bold ${color} text-center">${val}</div>
+      <div class="text-xs text-slate-300 uppercase font-semibold text-center">${label}</div>
     </div>`;
-  box.innerHTML = `<div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
-    ${card('Total', rows.length, 'text-indigo-600')}
-    ${card('Present', counts.present, 'text-emerald-600')}
-    ${card('Late', counts.late, 'text-amber-600')}
-    ${card('Absent', counts.absent, 'text-rose-600')}
-    ${card('Excused', counts.excused, 'text-blue-600')}
+  box.innerHTML = `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    ${card('Total', rows.length, 'text-indigo-200')}
+    ${card('Present', counts.present, 'text-emerald-300')}
+    ${card('Late', counts.late, 'text-amber-300')}
+    ${card('Absent', counts.absent, 'text-rose-300')}
+    ${card('Excused', counts.excused, 'text-blue-300')}
   </div>`;
 }
 

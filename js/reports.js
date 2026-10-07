@@ -87,15 +87,15 @@ export async function renderSummaryTable() {
     counts[record.event_id] = (counts[record.event_id] || 0) + 1;
   });
 
-  // Render rows
+  // Render rows: single clean line per event, uniform widths, vertical centering.
   tbody.innerHTML = eventsList.map(evt => {
     const totalCheckIns = counts[evt.id] || 0;
     return `
-      <tr class="border-b border-slate-100 hover:bg-slate-50">
-        <td class="p-4 font-semibold text-slate-800">${esc(evt.name)}<br><span class="text-xs text-slate-500">${esc(evt.venue || '-')}</span></td>
-        <td class="p-4 text-slate-600">${fmtDateTime(evt.start_datetime)}</td>
-        <td class="p-4">${statusBadge(evt.status)}</td>
-        <td class="p-4 text-center font-bold text-indigo-600">${totalCheckIns}</td>
+      <tr class="border-b border-white/10 hover:bg-white/5 transition-colors duration-200 align-middle">
+        <td class="p-4 w-1/4 align-middle font-semibold text-white whitespace-nowrap">${esc(evt.name)}</td>
+        <td class="p-4 w-1/4 align-middle text-slate-300 whitespace-nowrap">${fmtDateTime(evt.start_datetime)}</td>
+        <td class="p-4 w-1/4 align-middle">${statusBadge(evt.status)}</td>
+        <td class="p-4 w-1/4 align-middle text-center font-bold text-indigo-200">${totalCheckIns}</td>
       </tr>
     `;
   }).join('');
@@ -145,10 +145,10 @@ export async function renderAuditLog() {
   if (!data || data.length === 0) { tableMessage(tbody, 4, 'No system activity recorded yet.'); return; }
 
   tbody.innerHTML = data.map(l => `
-    <tr class="hover:bg-slate-50">
-      <td class="p-3 text-xs font-mono text-indigo-600">${esc(l.action)}</td>
-      <td class="p-3 text-sm">${esc(l.actor?.full_name || l.actor?.email || 'system')}</td>
-      <td class="p-3 text-xs text-slate-500">${esc(l.entity || '-')} ${l.entity_id ? `<span class="font-mono">${esc(String(l.entity_id).slice(0, 8))}</span>` : ''}</td>
-      <td class="p-3 text-xs text-slate-500">${esc(fmtDateTime(l.created_at))}</td>
+    <tr class="hover:bg-white/5 transition-colors duration-200 align-middle">
+      <td class="p-3 w-1/4 align-middle text-xs font-mono text-indigo-200">${esc(l.action)}</td>
+      <td class="p-3 w-1/4 align-middle text-sm text-white">${esc(l.actor?.full_name || l.actor?.email || 'system')}</td>
+      <td class="p-3 w-1/4 align-middle text-xs text-slate-300">${esc(l.entity || '-')} ${l.entity_id ? `<span class="font-mono">${esc(String(l.entity_id).slice(0, 8))}</span>` : ''}</td>
+      <td class="p-3 w-1/4 align-middle text-xs text-slate-300">${esc(fmtDateTime(l.created_at))}</td>
     </tr>`).join('');
 }

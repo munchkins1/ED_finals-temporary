@@ -133,11 +133,18 @@
       border-color: rgba(148,163,184,.5) !important;
     }
     #app-main input::placeholder, #app-main textarea::placeholder { color: #94a3b8; }
-    /* Table text stays dark on glass */
-    #app-main table { color: #1e293b; }
-    #app-main thead th { color: #475569 !important; }
+    /* Glass tables: crisp white text on frosted glass */
+    #app-main table { color: #fff; }
+    #app-main thead th { color: #e2e8f0 !important; }
+    #app-main tbody td { color: #f1f5f9; }
     /* Stat numbers pop on glass */
-    #tab-dashboard h3 { color: #0f172a; }
+    #tab-dashboard h3 { color: #fff; }
+    /* Buttons & action controls: smooth hover scale + glow everywhere */
+    button { transition: all .2s ease-in-out; }
+    button:not([disabled]):hover { transform: scale(1.03); box-shadow: 0 8px 20px rgba(99,102,241,.3); }
+    button:not([disabled]):active { transform: scale(.95); }
+    /* Glass cards lift on hover */
+    .glass-dark, .bg-white\/10 { transition: all .3s ease-in-out; }
   </style>
 </head>
 <body class="text-white font-sans antialiased min-h-screen flex flex-col" style="background: radial-gradient(ellipse 80% 60% at 50% 30%, #2b2a8f 0%, #1a1865 45%, #0d0c3d 75%, #070724 100%); background-attachment: fixed;">
@@ -155,10 +162,10 @@
       <nav id="main-nav" class="hidden md:flex items-center space-x-2 text-sm font-medium"></nav>
       <div class="flex items-center gap-3">
         <div class="text-right hidden sm:block">
-          <div id="current-user-name" class="text-sm font-semibold">-</div>
-          <div id="current-user-role" class="text-xs text-indigo-200">-</div>
+          <div id="current-user-name" class="text-white font-semibold text-sm">-</div>
+          <div id="current-user-role" class="text-xs uppercase tracking-wider text-indigo-300 bg-indigo-500/20 px-2.5 py-0.5 rounded-full inline-block mt-0.5">-</div>
         </div>
-        <button id="logout-btn" class="bg-white/15 hover:bg-white/25 border border-white/30 px-3 py-2 rounded-lg text-xs font-semibold backdrop-blur">
+        <button id="logout-btn" class="bg-white/15 hover:bg-white/25 border border-white/30 px-3 py-2 rounded-lg text-xs font-semibold backdrop-blur transition-all duration-200 ease-in-out hover:scale-[1.03] hover:shadow-lg hover:shadow-indigo-500/30 active:scale-95">
           <i class="fa-solid fa-right-from-bracket mr-1"></i>Logout
         </button>
       </div>
@@ -174,112 +181,112 @@
 
   <div id="mobile-nav" style="display: none;" class="md:hidden glass-dark flex justify-around py-3 text-xs font-medium text-indigo-100 hidden"></div>
 
-  <main id="app-main" aria-busy="true" style="display: none;" class="flex-grow max-w-7xl w-full mx-auto p-4 md:p-6 hidden">
+  <main id="app-main" aria-busy="true" style="display: none;" class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 p-4 md:p-6 hidden">
 
     <!-- DASHBOARD -->
-    <section id="tab-dashboard" class="tab-content space-y-6">
-      <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
-        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-          <p id="stat-students-label" class="text-xs text-slate-500 uppercase font-semibold">Students</p>
-          <h3 id="stat-students" class="text-2xl font-bold">-</h3>
+    <section id="tab-dashboard" class="tab-content space-y-6 w-full max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-4 text-center transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
+          <p id="stat-students-label" class="text-xs text-slate-300 uppercase font-semibold text-center">Students</p>
+          <h3 id="stat-students" class="text-2xl font-bold text-white text-center">-</h3>
         </div>
-        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-          <p class="text-xs text-slate-500 uppercase font-semibold">Events</p>
-          <h3 id="stat-events" class="text-2xl font-bold">-</h3>
+        <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-4 text-center transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
+          <p class="text-xs text-slate-300 uppercase font-semibold text-center">Events</p>
+          <h3 id="stat-events" class="text-2xl font-bold text-white text-center">-</h3>
         </div>
-        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-          <p class="text-xs text-slate-500 uppercase font-semibold">Open events</p>
-          <h3 id="stat-active-events" class="text-2xl font-bold">-</h3>
+        <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-4 text-center transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
+          <p class="text-xs text-slate-300 uppercase font-semibold text-center">Open events</p>
+          <h3 id="stat-active-events" class="text-2xl font-bold text-white text-center">-</h3>
         </div>
-        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-          <p class="text-xs text-slate-500 uppercase font-semibold">Total check-ins</p>
-          <h3 id="stat-checkins" class="text-2xl font-bold">-</h3>
+        <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-4 text-center transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
+          <p class="text-xs text-slate-300 uppercase font-semibold text-center">Total check-ins</p>
+          <h3 id="stat-checkins" class="text-2xl font-bold text-white text-center">-</h3>
         </div>
-        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-          <p class="text-xs text-slate-500 uppercase font-semibold">Check-ins today</p>
-          <h3 id="stat-today" class="text-2xl font-bold">-</h3>
+        <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-4 text-center transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1 col-span-1 sm:col-span-2 lg:col-span-1">
+          <p class="text-xs text-slate-300 uppercase font-semibold text-center">Check-ins today</p>
+          <h3 id="stat-today" class="text-2xl font-bold text-white text-center">-</h3>
         </div>
       </div>
 
-      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-        <h3 class="text-lg font-bold mb-4">Quick start</h3>
+      <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-6 transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
+        <h3 class="text-lg font-bold mb-4 text-white">Quick start</h3>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="p-4 bg-slate-50 rounded-lg border border-slate-200">
-            <div class="text-indigo-600 font-bold mb-1">1. Create an event</div>
-            <p class="text-sm text-slate-600">Teachers create events and open them for attendance.</p>
+          <div class="p-4 bg-white/10 rounded-2xl border border-white/20 transition-all duration-300 ease-in-out hover:bg-white/15 hover:-translate-y-1">
+            <div class="text-indigo-200 font-bold mb-1">1. Create an event</div>
+            <p class="text-sm text-slate-300">Teachers create events and open them for attendance.</p>
           </div>
-          <div class="p-4 bg-slate-50 rounded-lg border border-slate-200">
-            <div class="text-indigo-600 font-bold mb-1">2. Show the QR code</div>
-            <p class="text-sm text-slate-600">Display the event QR at the venue for students to scan.</p>
+          <div class="p-4 bg-white/10 rounded-2xl border border-white/20 transition-all duration-300 ease-in-out hover:bg-white/15 hover:-translate-y-1">
+            <div class="text-indigo-200 font-bold mb-1">2. Show the QR code</div>
+            <p class="text-sm text-slate-300">Display the event QR at the venue for students to scan.</p>
           </div>
-          <div class="p-4 bg-slate-50 rounded-lg border border-slate-200">
-            <div class="text-indigo-600 font-bold mb-1">3. Students scan &amp; check in</div>
-            <p class="text-sm text-slate-600">Attendance is validated and recorded instantly.</p>
+          <div class="p-4 bg-white/10 rounded-2xl border border-white/20 transition-all duration-300 ease-in-out hover:bg-white/15 hover:-translate-y-1">
+            <div class="text-indigo-200 font-bold mb-1">3. Students scan &amp; check in</div>
+            <p class="text-sm text-slate-300">Attendance is validated and recorded instantly.</p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- EVENTS -->
-    <section id="tab-events" class="tab-content hidden space-y-6">
-      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <h2 class="text-xl font-bold">Event Management</h2>
-          <p class="text-sm text-slate-500">Create, edit, view, close and manage events.</p>
-        </div>
+    <section id="tab-events" class="tab-content hidden space-y-6 w-full max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-6 text-center transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
+          <h2 class="text-xl font-bold text-white text-center">Event Management</h2>
+          <p class="text-sm text-slate-300 text-center">Create, edit, view, close and manage events.</p>
+      </div>
+      <div class="flex justify-end">
         <button id="create-event-btn" data-roles="teacher,admin"
-          class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition">
+          class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-all duration-200 ease-in-out hover:scale-[1.03] hover:shadow-lg hover:shadow-indigo-500/30 active:scale-95">
           <i class="fa-solid fa-plus mr-2"></i>Create Event
         </button>
       </div>
-      <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-x-auto">
+      <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl w-full overflow-x-auto transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30">
         <table class="w-full text-left border-collapse text-sm min-w-[720px]">
-          <thead class="bg-slate-100 text-slate-600 uppercase text-xs">
-            <tr>
-              <th class="p-4">Event</th>
-              <th class="p-4">Date &amp; Time</th>
-              <th class="p-4">Status</th>
-              <th class="p-4 text-right">Actions</th>
+          <thead class="bg-white/10 text-slate-200 uppercase text-xs">
+            <tr class="hover:bg-white/5 transition-colors duration-200">
+              <th class="p-4 w-1/4 align-middle">Event</th>
+              <th class="p-4 w-1/4 align-middle">Date &amp; Time</th>
+              <th class="p-4 w-1/4 align-middle">Status</th>
+              <th class="p-4 w-1/4 align-middle text-right">Actions</th>
             </tr>
           </thead>
-          <tbody id="events-table-body" class="divide-y divide-slate-200"></tbody>
+          <tbody id="events-table-body" class="divide-y divide-white/10"></tbody>
         </table>
       </div>
     </section>
 
     <!-- SCAN (student) -->
-    <section id="tab-scan" class="tab-content hidden space-y-6">
-      <div class="glass-dark text-white p-6 rounded-xl">
-        <h2 class="text-xl font-bold">Scan Event QR Code</h2>
-        <p class="text-indigo-200 text-sm">Point your camera at the event QR code, or type the event code manually.</p>
+    <section id="tab-scan" class="tab-content hidden space-y-6 w-full max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="glass-dark text-white p-6 rounded-2xl text-center border border-white/20 shadow-2xl transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
+        <h2 class="text-xl font-bold text-white text-center">Scan Event QR Code</h2>
+        <p class="text-slate-300 text-sm text-center">Point your camera at the event QR code, or type the event code manually.</p>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center">
-          <h3 class="text-md font-bold mb-3 w-full text-left"><i class="fa-solid fa-camera mr-2 text-indigo-600"></i>Camera Scanner</h3>
+        <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-6 flex flex-col items-center transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
+          <h3 class="text-md font-bold mb-3 w-full text-center text-white"><i class="fa-solid fa-camera mr-2 text-indigo-300"></i>Camera Scanner</h3>
           <div id="reader" class="w-full max-w-md rounded-lg overflow-hidden border border-slate-200 bg-slate-900 min-h-[240px] flex items-center justify-center text-slate-400 text-center text-sm p-4">
             Camera inactive or permission needed
           </div>
           <div class="flex gap-3 mt-4 w-full">
-            <button id="start-scan-btn" class="flex-1 bg-emerald-600 text-white py-2 rounded-lg font-medium hover:bg-emerald-700 transition text-sm"><i class="fa-solid fa-play mr-2"></i>Start</button>
-            <button id="stop-scan-btn" class="flex-1 bg-rose-600 text-white py-2 rounded-lg font-medium hover:bg-rose-700 transition text-sm"><i class="fa-solid fa-stop mr-2"></i>Stop</button>
+            <button id="start-scan-btn" class="flex-1 bg-emerald-600 text-white py-2 rounded-lg font-medium hover:bg-emerald-700 transition-all duration-200 ease-in-out hover:scale-[1.03] hover:shadow-lg hover:shadow-emerald-500/30 active:scale-95 text-sm"><i class="fa-solid fa-play mr-2"></i>Start</button>
+            <button id="stop-scan-btn" class="flex-1 bg-rose-600 text-white py-2 rounded-lg font-medium hover:bg-rose-700 transition-all duration-200 ease-in-out hover:scale-[1.03] hover:shadow-lg hover:shadow-rose-500/30 active:scale-95 text-sm"><i class="fa-solid fa-stop mr-2"></i>Stop</button>
           </div>
-          <div class="w-full mt-4">
-            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Manual event code</label>
+          <div class="w-full mt-4 text-center">
+            <label class="block text-xs font-semibold uppercase text-slate-300 mb-1 text-center">Manual event code</label>
             <div class="flex gap-2">
               <input id="manual-token" type="text" placeholder="Paste the event code shown under the QR"
-                class="flex-1 border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-              <button id="manual-checkin-btn" class="bg-indigo-600 text-white px-4 rounded-lg text-sm font-medium hover:bg-indigo-700">Check in</button>
+                class="flex-1 border border-white/20 bg-white/10 text-white rounded-lg p-2 text-sm text-center placeholder:text-center placeholder:text-slate-400 focus:ring-2 focus:ring-indigo-400 focus:outline-none">
+              <button id="manual-checkin-btn" class="bg-indigo-600 text-white px-4 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-all duration-200 ease-in-out hover:scale-[1.03] hover:shadow-lg hover:shadow-indigo-500/30 active:scale-95">Check in</button>
             </div>
           </div>
           <div id="scan-result" class="hidden w-full"></div>
         </div>
 
-        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col">
-          <h3 class="text-md font-bold mb-3"><i class="fa-solid fa-clock-rotate-left mr-2 text-indigo-600"></i>My recent check-ins</h3>
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-sm">
-              <tbody id="scan-recent-body" class="divide-y divide-slate-100"></tbody>
+        <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-6 flex flex-col transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
+          <h3 class="text-md font-bold mb-3 text-white"><i class="fa-solid fa-clock-rotate-left mr-2 text-indigo-300"></i>My recent check-ins</h3>
+          <div class="w-full overflow-x-auto">
+            <table class="w-full text-left text-sm min-w-[280px]">
+              <tbody id="scan-recent-body" class="divide-y divide-white/10"></tbody>
             </table>
           </div>
         </div>
@@ -287,128 +294,128 @@
     </section>
 
     <!-- EVENT QR (teacher/admin) -->
-    <section id="tab-qr" class="tab-content hidden space-y-6">
-      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-        <h2 class="text-xl font-bold">Event QR Codes</h2>
-        <p class="text-sm text-slate-500 mb-4">Select an event and display its QR code for students to scan at the venue.</p>
-        <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Event</label>
-        <select id="qr-event-select" class="w-full md:w-96 border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+    <section id="tab-qr" class="tab-content hidden space-y-6 w-full max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-6 transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
+        <h2 class="text-xl font-bold text-white text-center">Event QR Codes</h2>
+        <p class="text-sm text-slate-300 mb-4 text-center">Select an event and display its QR code for students to scan at the venue.</p>
+        <label class="block text-xs font-semibold uppercase text-slate-300 mb-1">Event</label>
+        <select id="qr-event-select" class="w-full md:w-96 border border-white/20 bg-white/10 text-white rounded-lg p-2 text-sm focus:ring-2 focus:ring-indigo-400 focus:outline-none transition-all duration-200 ease-in-out">
           <option value="">-- Select an event --</option>
         </select>
       </div>
-      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center text-center">
-        <div id="qr-inline-container" class="flex items-center justify-center p-4 bg-slate-50 border border-slate-200 rounded-lg min-h-[240px] min-w-[240px]">
-          <p class="text-sm text-slate-400 p-6">Select an event to display its QR code for students to scan.</p>
+      <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-6 flex flex-col items-center text-center transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
+        <div id="qr-inline-container" class="flex items-center justify-center p-4 bg-white/10 border border-white/20 rounded-2xl min-h-[240px] min-w-[240px] max-w-[240px] w-full mx-auto overflow-hidden [&_canvas]:max-w-[220px] [&_canvas]:w-full [&_canvas]:h-auto [&_canvas]:mx-auto [&_img]:max-w-[220px] [&_img]:w-full [&_img]:h-auto [&_img]:mx-auto">
+          <p class="text-sm text-slate-300 p-6 text-center">Select an event to display its QR code for students to scan.</p>
         </div>
-        <p id="qr-inline-meta" class="mt-4 font-semibold"></p>
-        <p class="text-xs text-slate-500 mt-1">Event code:</p>
-        <p id="qr-inline-token" class="text-xs font-mono text-slate-600 break-all px-4"></p>
-        <button id="download-inline-qr" class="mt-4 bg-slate-800 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-900">
+        <p id="qr-inline-meta" class="mt-4 font-semibold text-white text-center"></p>
+        <p class="text-xs text-slate-300 mt-1 text-center">Event code:</p>
+        <p id="qr-inline-token" class="text-xs font-mono text-slate-200 break-all px-4 text-center"></p>
+        <button id="download-inline-qr" class="mt-4 bg-slate-800 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-900 transition-all duration-200 ease-in-out hover:scale-[1.03] hover:shadow-lg hover:shadow-indigo-500/30 active:scale-95">
           <i class="fa-solid fa-download mr-2"></i>Download QR
         </button>
       </div>
     </section>
 
     <!-- MY ATTENDANCE (student) -->
-    <section id="tab-history" class="tab-content hidden space-y-6">
-      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-        <h2 class="text-xl font-bold">My Attendance History</h2>
-        <p class="text-sm text-slate-500">A record of the events you have checked in to.</p>
+    <section id="tab-history" class="tab-content hidden space-y-6 w-full max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-6 text-center transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
+        <h2 class="text-xl font-bold text-white text-center">My Attendance History</h2>
+        <p class="text-sm text-slate-300 text-center">A record of the events you have checked in to.</p>
       </div>
       <div id="my-attendance-summary"></div>
-      <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-x-auto">
+      <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl w-full overflow-x-auto transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30">
         <table class="w-full text-left border-collapse text-sm min-w-[600px]">
-          <thead class="bg-slate-100 text-slate-600 uppercase text-xs">
-            <tr>
-              <th class="p-4">Event</th>
-              <th class="p-4">Venue</th>
-              <th class="p-4">Status</th>
-              <th class="p-4">Recorded</th>
+          <thead class="bg-white/10 text-slate-200 uppercase text-xs">
+            <tr class="hover:bg-white/5 transition-colors duration-200">
+              <th class="p-4 flex-1 align-middle">Event</th>
+              <th class="p-4 flex-1 align-middle">Venue</th>
+              <th class="p-4 flex-1 align-middle">Status</th>
+              <th class="p-4 flex-1 align-middle">Recorded</th>
             </tr>
           </thead>
-          <tbody id="my-attendance-body" class="divide-y divide-slate-200"></tbody>
+          <tbody id="my-attendance-body" class="divide-y divide-white/10"></tbody>
         </table>
       </div>
     </section>
 
     <!-- ATTENDANCE RECORDS (teacher/admin) -->
-    <section id="tab-records" class="tab-content hidden space-y-6">
-      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <section id="tab-records" class="tab-content hidden space-y-6 w-full max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
         <div>
-          <h2 class="text-xl font-bold">Attendance Records</h2>
-          <p class="text-sm text-slate-500">Monitor attendance and correct records when needed.</p>
+          <h2 class="text-xl font-bold text-white text-center md:text-left">Attendance Records</h2>
+          <p class="text-sm text-slate-300 text-center md:text-left">Monitor attendance and correct records when needed.</p>
         </div>
         <div class="flex gap-2 items-end flex-wrap">
           <div>
-            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Filter by event</label>
-            <select id="records-event-select" class="border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+            <label class="block text-xs font-semibold uppercase text-slate-300 mb-1">Filter by event</label>
+            <select id="records-event-select" class="border border-white/20 bg-white/10 text-white rounded-lg p-2 text-sm focus:ring-2 focus:ring-indigo-400 focus:outline-none transition-all duration-200 ease-in-out">
               <option value="">All events</option>
             </select>
           </div>
-          <button id="export-csv-btn" class="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700">
+          <button id="export-csv-btn" class="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700 transition-all duration-200 ease-in-out hover:scale-[1.03] hover:shadow-lg hover:shadow-emerald-500/30 active:scale-95">
             <i class="fa-solid fa-download mr-2"></i>Export CSV
           </button>
         </div>
       </div>
       <div id="records-summary"></div>
-      <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-x-auto">
+      <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl w-full overflow-x-auto transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30">
         <table class="w-full text-left border-collapse text-sm min-w-[720px]">
-          <thead class="bg-slate-100 text-slate-600 uppercase text-xs">
-            <tr>
-              <th class="p-4">Student</th>
-              <th class="p-4">Event</th>
-              <th class="p-4">Status</th>
-              <th class="p-4">Recorded</th>
-              <th class="p-4 text-right">Actions</th>
+          <thead class="bg-white/10 text-slate-200 uppercase text-xs">
+            <tr class="hover:bg-white/5 transition-colors duration-200">
+              <th class="p-4 w-1/5 align-middle">Student</th>
+              <th class="p-4 w-1/5 align-middle">Event</th>
+              <th class="p-4 w-1/5 align-middle">Status</th>
+              <th class="p-4 w-1/5 align-middle">Recorded</th>
+              <th class="p-4 w-1/5 align-middle text-right">Actions</th>
             </tr>
           </thead>
-          <tbody id="records-body" class="divide-y divide-slate-200"></tbody>
+          <tbody id="records-body" class="divide-y divide-white/10"></tbody>
         </table>
       </div>
     </section>
 
     <!-- REPORTS (teacher/admin) -->
-    <section id="tab-reports" class="tab-content hidden space-y-6">
-      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-        <h2 class="text-xl font-bold">Reports &amp; Overview</h2>
-        <p class="text-sm text-slate-500">Attendance summaries and system activity.</p>
+    <section id="tab-reports" class="tab-content hidden space-y-6 w-full max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-6 text-center transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
+        <h2 class="text-xl font-bold text-white text-center">Reports &amp; Overview</h2>
+        <p class="text-sm text-slate-300 text-center">Attendance summaries and system activity.</p>
       </div>
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-          <p class="text-xs text-slate-500 uppercase font-semibold">Total check-ins</p>
-          <h3 id="stat-checkins2" class="text-2xl font-bold">-</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-4 text-center transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
+          <p class="text-xs text-slate-300 uppercase font-semibold text-center">Total check-ins</p>
+          <h3 id="stat-checkins2" class="text-2xl font-bold text-white text-center">-</h3>
         </div>
-        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-          <p class="text-xs text-slate-500 uppercase font-semibold">Check-ins today</p>
-          <h3 id="stat-today2" class="text-2xl font-bold">-</h3>
+        <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-4 text-center transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
+          <p class="text-xs text-slate-300 uppercase font-semibold text-center">Check-ins today</p>
+          <h3 id="stat-today2" class="text-2xl font-bold text-white text-center">-</h3>
         </div>
-        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-          <p class="text-xs text-slate-500 uppercase font-semibold">Events</p>
-          <h3 id="stat-events2" class="text-2xl font-bold">-</h3>
+        <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-4 text-center transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
+          <p class="text-xs text-slate-300 uppercase font-semibold text-center">Events</p>
+          <h3 id="stat-events2" class="text-2xl font-bold text-white text-center">-</h3>
         </div>
-        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-          <p class="text-xs text-slate-500 uppercase font-semibold">Open events</p>
-          <h3 id="stat-open2" class="text-2xl font-bold">-</h3>
+        <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-4 text-center transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
+          <p class="text-xs text-slate-300 uppercase font-semibold text-center">Open events</p>
+          <h3 id="stat-open2" class="text-2xl font-bold text-white text-center">-</h3>
         </div>
       </div>
 
       <!-- Summary Breakdown Table Card -->
-      <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-        <div class="p-6 border-b border-slate-100">
-          <h3 class="font-bold text-slate-800 text-lg">Event Attendance Breakdown</h3>
-          <p class="text-sm text-slate-500">Detailed summary of check-ins per event.</p>
+      <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl overflow-hidden transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30">
+        <div class="p-6 border-b border-white/10 text-center">
+          <h3 class="font-bold text-white text-lg text-center">Event Attendance Breakdown</h3>
+          <p class="text-sm text-slate-300 text-center">Detailed summary of check-ins per event.</p>
         </div>
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse text-sm">
+        <div class="w-full overflow-x-auto">
+          <table class="w-full text-left border-collapse text-sm min-w-[640px]">
             <thead>
-              <tr class="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
-                <th class="p-4">Event Name</th>
-                <th class="p-4">Date &amp; Time</th>
-                <th class="p-4">Status</th>
-                <th class="p-4 text-center">Total Check-Ins</th>
+              <tr class="bg-white/10 text-slate-200 font-semibold border-b border-white/10 hover:bg-white/5 transition-colors duration-200">
+                <th class="p-4 w-1/4 align-middle">Event Name</th>
+                <th class="p-4 w-1/4 align-middle">Date &amp; Time</th>
+                <th class="p-4 w-1/4 align-middle">Status</th>
+                <th class="p-4 w-1/4 align-middle text-center">Total Check-Ins</th>
               </tr>
             </thead>
-            <tbody id="summary-table-body">
+            <tbody id="summary-table-body" class="divide-y divide-white/10">
               <!-- Rows will be dynamically injected here via JavaScript -->
             </tbody>
           </table>
@@ -416,134 +423,135 @@
       </div>
 
       <!-- System activity log (admin only: System Reports) -->
-      <div data-roles="admin" class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-        <div class="p-4 border-b border-slate-200 bg-slate-50 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
-          <div>
-            <h3 class="font-bold"><i class="fa-solid fa-clipboard-list mr-2 text-indigo-600"></i>System Activity Log</h3>
-            <p class="text-xs text-slate-500">Audit trail of key system events.</p>
+      <div data-roles="admin" class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl overflow-hidden transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30">
+        <div class="p-4 border-b border-white/10 bg-white/10 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+          <div class="w-full text-center">
+            <h3 class="font-bold text-white text-center"><i class="fa-solid fa-clipboard-list mr-2 text-indigo-300"></i>System Activity Log</h3>
+            <p class="text-xs text-slate-300 text-center">Audit trail of key system events.</p>
           </div>
-          <button id="admin-audit-refresh-btn" class="self-start sm:self-auto px-3 py-1.5 text-xs font-medium text-indigo-600 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition">
+          <button id="admin-audit-refresh-btn" class="self-center sm:self-auto px-3 py-1.5 text-xs font-medium text-indigo-200 bg-indigo-500/20 rounded-lg hover:bg-indigo-500/30 transition-all duration-200 ease-in-out hover:scale-[1.03] active:scale-95">
             <i class="fa-solid fa-rotate mr-2"></i>Refresh
           </button>
         </div>
-        <div class="overflow-x-auto">
+        <div class="w-full overflow-x-auto">
           <table class="w-full text-left border-collapse text-sm min-w-[600px]">
-            <thead class="bg-slate-100 text-slate-600 uppercase text-xs">
-              <tr>
-                <th class="p-3">Action</th>
-                <th class="p-3">Actor</th>
-                <th class="p-3">Entity</th>
-                <th class="p-3">When</th>
+            <thead class="bg-white/10 text-slate-200 uppercase text-xs">
+              <tr class="hover:bg-white/5 transition-colors duration-200">
+                <th class="p-3 w-1/4 align-middle">Action</th>
+                <th class="p-3 w-1/4 align-middle">Actor</th>
+                <th class="p-3 w-1/4 align-middle">Entity</th>
+                <th class="p-3 w-1/4 align-middle">When</th>
               </tr>
             </thead>
-            <tbody id="audit-body" class="divide-y divide-slate-200"></tbody>
+            <tbody id="audit-body" class="divide-y divide-white/10"></tbody>
           </table>
         </div>
       </div>
     </section>
 
     <!-- MANAGE USERS (admin) -->
-    <section id="tab-users" class="tab-content hidden space-y-6">
-      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <section id="tab-users" class="tab-content hidden space-y-6 w-full max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
         <div>
-          <h3 class="font-bold"><i class="fa-solid fa-users-gear mr-2 text-indigo-600"></i>User Management</h3>
-          <p class="text-sm text-slate-500">Manage roles, profiles and account status.</p>
+          <h3 class="font-bold text-white"><i class="fa-solid fa-users-gear mr-2 text-indigo-300"></i>User Management</h3>
+          <p class="text-sm text-slate-300">Manage roles, profiles and account status.</p>
         </div>
         <input id="user-search" type="text" placeholder="Search name, email or student ID."
-          class="w-full md:w-72 border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+          class="w-full md:w-72 border border-white/20 bg-white/10 text-white rounded-lg p-2 text-sm placeholder:text-slate-400 focus:ring-2 focus:ring-indigo-400 focus:outline-none transition-all duration-200 ease-in-out">
       </div>
-      <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-x-auto">
+      <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl w-full overflow-x-auto transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30">
         <table class="w-full text-left border-collapse text-sm min-w-[820px]">
-          <thead class="bg-slate-100 text-slate-600 uppercase text-xs">
-            <tr>
-              <th class="p-4">User</th>
-              <th class="p-4">Details</th>
-              <th class="p-4">Role</th>
-              <th class="p-4">Status</th>
-              <th class="p-4 text-right">Actions</th>
+          <thead class="bg-white/10 text-slate-200 uppercase text-xs">
+            <tr class="hover:bg-white/5 transition-colors duration-200">
+              <th class="p-4 w-1/5 align-middle">User</th>
+              <th class="p-4 w-1/5 align-middle">Details</th>
+              <th class="p-4 w-1/5 align-middle">Role</th>
+              <th class="p-4 w-1/5 align-middle">Status</th>
+              <th class="p-4 w-1/5 align-middle text-right">Actions</th>
             </tr>
           </thead>
-          <tbody id="users-body" class="divide-y divide-slate-200"></tbody>
+          <tbody id="users-body" class="divide-y divide-white/10"></tbody>
         </table>
       </div>
     </section>
 
     <!-- OVERALL ATTENDANCE (admin) -->
-    <section id="tab-attendance" class="tab-content hidden space-y-6">
-      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-        <h3 class="font-bold mb-4"><i class="fa-solid fa-chart-simple mr-2 text-indigo-600"></i>Attendance Overview (All Events)</h3>
+    <section id="tab-attendance" class="tab-content hidden space-y-6 w-full max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-6 transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
+        <h3 class="font-bold mb-4 text-white text-center flex items-center justify-center text-center"><i class="fa-solid fa-chart-simple mr-2 text-indigo-300"></i>Attendance Overview (All Events)</h3>
         <div id="admin-overview"></div>
       </div>
     </section>
 
     <!-- CORRECT RECORDS (admin) -->
-    <section id="tab-correct" class="tab-content hidden space-y-6">
-      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <section id="tab-correct" class="tab-content hidden space-y-6 w-full max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
         <div>
-          <h3 class="font-bold"><i class="fa-solid fa-clipboard-check mr-2 text-indigo-600"></i>Manage Attendance Records</h3>
-          <p class="text-sm text-slate-500">Correct a status or remove an inaccurate record for any event.</p>
+          <h3 class="font-bold text-white"><i class="fa-solid fa-clipboard-check mr-2 text-indigo-300"></i>Manage Attendance Records</h3>
+          <p class="text-sm text-slate-300">Correct a status or remove an inaccurate record for any event.</p>
         </div>
         <div class="flex gap-2 items-end flex-wrap self-start md:self-auto">
           <div>
-            <label for="admin-records-event-select" class="block text-xs font-semibold uppercase text-slate-500 mb-1">Filter by event</label>
-            <select id="admin-records-event-select" class="border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+            <label for="admin-records-event-select" class="block text-xs font-semibold uppercase text-slate-300 mb-1">Filter by event</label>
+            <select id="admin-records-event-select" class="border border-white/20 bg-white/10 text-white rounded-lg p-2 text-sm focus:ring-2 focus:ring-indigo-400 focus:outline-none transition-all duration-200 ease-in-out">
               <option value="">All events</option>
             </select>
           </div>
-          <button id="admin-records-export-btn" class="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700">
+          <button id="admin-records-export-btn" class="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700 transition-all duration-200 ease-in-out hover:scale-[1.03] hover:shadow-lg hover:shadow-emerald-500/30 active:scale-95">
             <i class="fa-solid fa-download mr-2"></i>Export CSV
           </button>
         </div>
       </div>
       <div id="admin-records-summary"></div>
-      <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-x-auto">
+      <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl w-full overflow-x-auto transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30">
         <table class="w-full text-left border-collapse text-sm min-w-[720px]">
-          <thead class="bg-slate-100 text-slate-600 uppercase text-xs">
-            <tr>
-              <th class="p-4">Student</th>
-              <th class="p-4">Event</th>
-              <th class="p-4">Status</th>
-              <th class="p-4">Recorded</th>
-              <th class="p-4 text-right">Actions</th>
+          <thead class="bg-white/10 text-slate-200 uppercase text-xs">
+            <tr class="hover:bg-white/5 transition-colors duration-200">
+              <th class="p-4 w-1/5 align-middle">Student</th>
+              <th class="p-4 w-1/5 align-middle">Event</th>
+              <th class="p-4 w-1/5 align-middle">Status</th>
+              <th class="p-4 w-1/5 align-middle">Recorded</th>
+              <th class="p-4 w-1/5 align-middle text-right">Actions</th>
             </tr>
           </thead>
-          <tbody id="admin-records-body" class="divide-y divide-slate-200"></tbody>
+          <tbody id="admin-records-body" class="divide-y divide-white/10"></tbody>
         </table>
       </div>
     </section>
 
     <!-- PROFILE (all) -->
-    <section id="tab-profile" class="tab-content hidden space-y-6">
-      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-        <h2 class="text-xl font-bold">My Profile</h2>
+    <section id="tab-profile" class="tab-content hidden space-y-6 w-full max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-6 text-center transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
+        <h2 class="text-xl font-bold text-white text-center">My Profile</h2>
         <p id="profile-subtitle" class="text-sm text-slate-500">View and update your personal information.</p>
       </div>
 
       <!-- STUDENT: read-only profile card (staff uses the edit form below) -->
-      <div id="profile-student-view" class="bg-white p-6 sm:p-8 rounded-xl shadow-sm border border-slate-200 hidden">
-        <h3 class="text-lg font-bold mb-1">Student Profile</h3>
-        <p class="text-sm text-slate-500 mb-6">View your personal student registration details.</p>
+      <div id="profile-student-view" class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-6 sm:p-8 hidden transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
+        <h3 class="text-lg font-bold mb-1 text-white text-center">Student Profile</h3>
+        <p class="text-sm text-slate-300 mb-6 text-center">View your personal student registration details.</p>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
-          <!-- LEFT: avatar + name + student ID -->
-          <div class="flex flex-col items-center justify-center self-center text-center md:border-r md:border-slate-200 md:pr-10 py-4">
-            <div class="w-56 h-56 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center overflow-hidden">
-              <i class="fa-solid fa-circle-user text-9xl text-slate-300"></i>
+          <!-- LEFT: aesthetic colorful avatar + centered name + STUDENT ID -->
+          <div class="flex flex-col items-center justify-center self-center text-center md:border-r md:border-white/20 md:pr-10 py-4">
+            <div class="w-56 h-56 rounded-full flex items-center justify-center overflow-hidden shadow-2xl ring-4 ring-white/30" style="background: linear-gradient(135deg,#6366f1,#8b5cf6,#ec4899,#f59e0b);">
+              <i class="fa-solid fa-circle-user text-9xl text-white/90"></i>
             </div>
-            <p id="student-card-name" class="mt-4 text-[1.7rem] leading-tight font-extrabold text-slate-900 break-words">—</p>
-            <p class="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-400">Student ID</p>
-            <p id="student-card-id" class="text-base font-medium text-slate-600">—</p>
+            <p id="student-card-name" class="mt-4 text-[1.7rem] leading-tight font-extrabold text-white break-words text-center">Paul Ryje Hantica</p>
+            <p class="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-300 text-center">Student ID</p>
+            <p id="student-card-id" class="text-base font-medium text-white text-center">20252024</p>
           </div>
-          <!-- RIGHT: contact + educational details -->
-          <div class="min-w-0">
-            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">Personal Information</h4>
+          <!-- RIGHT: bordered info cards, fully center-aligned -->
+          <div class="min-w-0 space-y-4">
+            <div class="rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md p-4 transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 mb-4 text-center">Personal Information</h4>
             <div class="space-y-4">
               <div>
-                <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Email</label>
-                <input id="email-input" type="text" readonly class="w-full border-0 border-b border-slate-200 bg-transparent px-0 py-1.5 text-sm text-slate-800 focus:outline-none focus:ring-0">
+                <label class="block text-xs font-semibold uppercase text-slate-300 mb-1 text-center">Email</label>
+                <input id="email-input" type="text" readonly value="you@school.edu" class="w-full border border-white/20 bg-white/10 rounded-lg px-3 py-1.5 text-sm text-white text-center focus:outline-none">
               </div>
               <div>
-                <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Phone Number</label>
-                <input id="phone-input" type="text" readonly class="w-full border-0 border-b border-slate-200 bg-transparent px-0 py-1.5 text-sm text-slate-800 focus:outline-none focus:ring-0">
+                <label class="block text-xs font-semibold uppercase text-slate-300 mb-1 text-center">Phone Number</label>
+                <input id="phone-input" type="text" readonly value="096585463" class="w-full border border-white/20 bg-white/10 rounded-lg px-3 py-1.5 text-sm text-white text-center focus:outline-none">
               </div>
               <!-- Full name stays in the DOM (hidden) so existing JS selectors keep working;
                    the visible name lives in the left column above. -->
@@ -557,49 +565,71 @@
                  chosen by fieldsForLevel() from the stored educational_level - the
                  same rule as registration and the admin modal - inside
                  renderProfileEducation() (js/app.js). -->
-            <div class="mt-6 pt-6 border-t border-slate-200">
-              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">Educational Information</h4>
+            <div class="mt-6 pt-6 border-t border-white/20 rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md p-4">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 mb-4 text-center">Educational Information</h4>
               <!-- Shown by renderProfileEducation() when educational_level is NULL,
                    which is every account created before sql/10_education_levels.sql. -->
-              <p id="edu-empty-note" class="hidden mb-4 rounded-lg bg-amber-50 border border-amber-200 text-amber-700 text-sm p-3">
+              <p id="edu-empty-note" class="hidden mb-4 rounded-lg bg-amber-500/20 border border-amber-300/30 text-amber-100 text-sm p-3 text-center">
                 Your educational details have not been set on your account yet.
                 Ask an administrator to fill them in from <strong>Admin → Manage Users → Edit</strong>.
               </p>
               <div class="space-y-4">
                 <div>
-                  <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Educational Level</label>
-                  <input type="text" id="edu-level-input" readonly class="w-full border-0 border-b border-slate-200 bg-transparent px-0 py-1.5 text-sm text-slate-800 focus:outline-none focus:ring-0">
+                  <label class="block text-xs font-semibold uppercase text-slate-300 mb-1 text-center">Educational Lvl</label>
+                  <input type="text" id="edu-level-input" readonly value="College" class="w-full border border-white/20 bg-white/10 rounded-lg px-3 py-1.5 text-sm text-white text-center focus:outline-none">
                 </div>
 
-              <div class="hidden" id="edu-course-row">
-                <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">
-                  <span id="edu-course-label">Department / Course</span>
+              <div id="edu-course-row">
+                <label class="block text-xs font-semibold uppercase text-slate-300 mb-1 text-center">
+                  <span id="edu-course-label">Department/CRS</span>
                 </label>
-                <input type="text" id="edu-course-input" readonly class="w-full border-0 border-b border-slate-200 bg-transparent px-0 py-1.5 text-sm text-slate-800 focus:outline-none focus:ring-0">
+                <input type="text" id="edu-course-input" readonly value="BSIT" class="w-full border border-white/20 bg-white/10 rounded-lg px-3 py-1.5 text-sm text-white text-center focus:outline-none">
               </div>
 
-              <div class="hidden" id="edu-year-row">
-                <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">
+              <div id="edu-year-row">
+                <label class="block text-xs font-semibold uppercase text-slate-300 mb-1 text-center">
                   <span id="edu-year-label">Year Level</span>
                 </label>
-                <input type="text" id="edu-year-input" readonly class="w-full border-0 border-b border-slate-200 bg-transparent px-0 py-1.5 text-sm text-slate-800 focus:outline-none focus:ring-0">
+                <input type="text" id="edu-year-input" readonly value="3" class="w-full border border-white/20 bg-white/10 rounded-lg px-3 py-1.5 text-sm text-white text-center focus:outline-none">
               </div>
 
-              <div class="hidden" id="edu-block-row">
-                <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Block</label>
-                <input type="text" id="edu-block-input" readonly class="w-full border-0 border-b border-slate-200 bg-transparent px-0 py-1.5 text-sm text-slate-800 focus:outline-none focus:ring-0">
+              <div id="edu-block-row">
+                <label class="block text-xs font-semibold uppercase text-slate-300 mb-1 text-center">Block</label>
+                <input type="text" id="edu-block-input" readonly value="C" class="w-full border border-white/20 bg-white/10 rounded-lg px-3 py-1.5 text-sm text-white text-center focus:outline-none">
               </div>
 
               <div class="hidden" id="edu-section-row">
-                <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Section</label>
-                <input type="text" id="edu-section-input" readonly class="w-full border-0 border-b border-slate-200 bg-transparent px-0 py-1.5 text-sm text-slate-800 focus:outline-none focus:ring-0">
+                <label class="block text-xs font-semibold uppercase text-slate-300 mb-1 text-center">Section</label>
+                <input type="text" id="edu-section-input" readonly class="w-full border border-white/20 bg-white/10 rounded-lg px-3 py-1.5 text-sm text-white text-center focus:outline-none">
               </div>
               </div>
             </div>
           </div>
         </div>
+        <!-- Account Overview: centered 3-column metric cards -->
+        <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-6 transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
+          <h3 class="text-lg font-bold text-white text-center">Account Overview</h3>
+          <p class="text-sm text-slate-300 text-center mb-4">Your role, attendance count, and account age at a glance.</p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="rounded-2xl border border-white/20 bg-white/10 p-4 text-center">
+              <div class="text-2xl text-center">🛡️</div>
+              <p class="text-xs font-semibold uppercase tracking-wider text-slate-300 text-center mt-2">Account Role</p>
+              <p id="role-display" class="text-lg font-bold text-white text-center">Student</p>
+            </div>
+            <div class="rounded-2xl border border-white/20 bg-white/10 p-4 text-center">
+              <div class="text-2xl text-center">📅</div>
+              <p class="text-xs font-semibold uppercase tracking-wider text-slate-300 text-center mt-2">Total Events</p>
+              <p id="events-attended-display" class="text-lg font-bold text-white text-center">2</p>
+            </div>
+            <div class="rounded-2xl border border-white/20 bg-white/10 p-4 text-center">
+              <div class="text-2xl text-center">🕒</div>
+              <p class="text-xs font-semibold uppercase tracking-wider text-slate-300 text-center mt-2">Account Created</p>
+              <p id="created-date-display" class="text-lg font-bold text-white text-center">October 7, 2026</p>
+            </div>
+          </div>
+        </div>
       </div>
-      <div id="profile-form-view" class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 max-w-2xl">
+      <div id="profile-form-view" class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-6 max-w-2xl w-full transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
         <form id="profile-form" class="space-y-4">
           <div>
             <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Email (read only)</label>
@@ -672,13 +702,13 @@
       </div>
 
       <!-- Live stats & metadata (all roles) -->
-      <div id="profile-stats" class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 max-w-2xl">
-        <h3 class="text-lg font-bold mb-1">Account Overview</h3>
-        <p class="text-sm text-slate-500 mb-4">Your role, attendance count and account age at a glance.</p>
-        <div class="p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-1.5">
-          <p class="text-sm"><span class="font-semibold">Account Role:</span> <span id="role-display">-</span></p>
-          <p class="text-sm"><span class="font-semibold">Total Events Attended:</span> <span id="events-attended-display">0</span></p>
-          <p class="text-sm"><span class="font-semibold">Account Created:</span> <span id="created-date-display">N/A</span></p>
+      <div id="profile-stats" class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-6 max-w-2xl w-full transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
+        <h3 class="text-lg font-bold mb-1 text-white text-center">Account Overview</h3>
+        <p class="text-sm text-slate-300 mb-4 text-center">Your role, attendance count and account age at a glance.</p>
+        <div class="p-4 bg-white/10 rounded-2xl border border-white/20 space-y-1.5 text-center">
+          <p class="text-sm text-slate-200"><span class="font-semibold text-white">Account Role:</span> <span data-role-display>-</span></p>
+          <p class="text-sm text-slate-200"><span class="font-semibold text-white">Total Events Attended:</span> <span data-events-display>0</span></p>
+          <p class="text-sm text-slate-200"><span class="font-semibold text-white">Account Created:</span> <span data-created-display>N/A</span></p>
         </div>
       </div>
     </section>
@@ -687,8 +717,8 @@
 
 <!-- MODAL: CREATE / EDIT EVENT -->
   <div id="event-modal" class="fixed inset-0 bg-slate-900/50 hidden items-center justify-center p-4 z-50 overflow-y-auto">
-    <div class="bg-white rounded-xl max-w-lg w-full p-6 shadow-xl my-8">
-      <h3 id="event-modal-title" class="text-lg font-bold mb-4">Create Event</h3>
+    <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl max-w-lg w-full p-6 my-8">
+      <h3 id="event-modal-title" class="text-lg font-bold mb-4 text-white text-center">Create Event</h3>
       <form id="event-form" class="space-y-4">
         <div>
           <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Event name</label>
@@ -720,9 +750,8 @@
             <option value="closed">Closed</option>
           </select>
         </div>
-        <div class="flex justify-end space-x-3 pt-2">
-          <button type="button" id="close-event-modal" class="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50">Cancel</button>
-          <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700">Save Event</button>
+        <div class="flex justify-center pt-2">
+          <button type="submit" class="px-6 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-all duration-200 ease-in-out hover:scale-[1.03] hover:shadow-lg hover:shadow-indigo-500/30 active:scale-95">Save Event</button>
         </div>
       </form>
     </div>
@@ -730,7 +759,7 @@
 
 <!-- MODAL: VIEW EVENT -->
   <div id="event-view-modal" class="fixed inset-0 bg-slate-900/50 hidden items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-xl max-w-md w-full p-6 shadow-xl">
+    <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl max-w-md w-full p-6 transition-all duration-300 ease-in-out">
       <div class="flex justify-between items-start gap-3">
         <h3 id="view-name" class="text-lg font-bold">Event</h3>
         <span id="view-status"></span>
@@ -747,7 +776,7 @@
 
   <!-- MODAL: EVENT QR -->
   <div id="event-qr-modal" class="fixed inset-0 bg-slate-900/50 hidden items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-xl max-w-sm w-full p-6 shadow-xl text-center space-y-3">
+    <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl max-w-sm w-full p-6 text-center space-y-3 transition-all duration-300 ease-in-out">
       <h3 id="event-qr-title" class="text-lg font-bold">Event QR</h3>
       <div class="flex justify-center"><span id="event-qr-status"></span></div>
       <div id="event-qr-container" class="flex justify-center p-3 bg-slate-50 border border-slate-200 rounded-lg"></div>
@@ -755,23 +784,28 @@
       <p class="text-xs text-slate-500">Event code:</p>
       <p id="event-qr-token" class="text-xs font-mono text-slate-600 break-all"></p>
       <div class="flex gap-2 pt-1">
-        <button id="event-qr-download" class="flex-1 py-2 bg-slate-800 text-white rounded-lg text-sm font-medium hover:bg-slate-900"><i class="fa-solid fa-download mr-1"></i>Download</button>
-        <button id="close-event-qr" class="flex-1 py-2 border border-slate-300 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50">Close</button>
+        <button id="event-qr-download" class="flex-1 py-2 bg-slate-800 text-white rounded-lg text-sm font-medium hover:bg-slate-900 transition-all duration-200 ease-in-out hover:scale-[1.03] hover:shadow-lg hover:shadow-indigo-500/30 active:scale-95"><i class="fa-solid fa-download mr-1"></i>Download</button>
+        <button id="close-event-qr" class="flex-1 py-2 border border-white/30 text-white rounded-lg text-sm font-medium hover:bg-white/10 transition-all duration-200 ease-in-out hover:scale-[1.03] active:scale-95">Close</button>
       </div>
     </div>
   </div>
 
 <!-- MODAL: EDIT USER -->
   <div id="user-modal" class="fixed inset-0 bg-slate-900/50 hidden items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-xl max-w-lg w-full p-6 shadow-xl">
-      <h3 class="text-lg font-bold mb-4">Edit User Profile</h3>
+    <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl max-w-lg w-full max-h-[85vh] overflow-y-auto px-6 py-4">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-bold text-white text-center flex-1">Edit User</h3>
+        <button type="button" id="close-user-modal" class="text-slate-300 hover:text-white transition-all duration-200 ease-in-out hover:scale-110 active:scale-95 ml-2" aria-label="Close">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
       <form id="user-form" class="space-y-4">
         <!-- PERSONAL INFORMATION: mirrors the "Personal Information" card on the
              user's own Profile tab. Email is display-only - it is the Supabase
              Auth sign-in address and is not part of the column-level UPDATE
              grant (sql/07 / sql/10), so only its owner can change it. -->
         <div class="space-y-4">
-          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Personal Information</h4>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 text-center">Personal Information</h4>
           <div>
             <label for="modal-user-name" class="block text-xs font-semibold uppercase text-slate-500 mb-1">Full name</label>
             <input id="modal-user-name" type="text" class="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
@@ -801,8 +835,8 @@
         <!-- Educational Level drives the group below. Saving regenerates the
              denormalised department + grade_class pair automatically, so an
              admin never types them by hand. -->
-        <div class="border-t border-slate-200 pt-4 space-y-4">
-          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Educational Information</h4>
+        <div class="border-t border-white/20 pt-4 space-y-4">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 text-center">Educational Information</h4>
           <div>
             <label for="modal-user-level" class="block text-xs font-semibold uppercase text-slate-500 mb-1">Educational Level</label>
             <select id="modal-user-level" data-edu-input="educational_level"
@@ -840,9 +874,8 @@
               placeholder="e.g. A">
           </div>
         </div>
-        <div class="flex justify-end space-x-3 pt-2">
-          <button type="button" id="close-user-modal" class="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50">Cancel</button>
-          <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700">Save</button>
+        <div class="sticky bottom-0 flex justify-center pt-4 border-t border-white/20 bg-white/10 backdrop-blur-md pb-2">
+          <button type="submit" class="px-6 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-all duration-200 ease-in-out hover:scale-[1.03] hover:shadow-lg hover:shadow-indigo-500/30 active:scale-95">Save Changes</button>
         </div>
       </form>
     </div>

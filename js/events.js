@@ -90,6 +90,8 @@ function visibleEvents() {
 export function renderEvents() {
   const tbody = document.getElementById('events-table-body');
   if (!tbody) return;
+  // Role-based access: teachers keep View/QR/Edit/Close, admins also get Delete.
+  const isAdmin = profile && profile.role === 'admin';
   const list = visibleEvents();
 
   if (list.length === 0) {
@@ -109,30 +111,35 @@ function btn(act, id, cls, label, icon) {
 function renderEventRow(evt) {
   const manage = canManage(evt);
   const actions = manage ? manageActions(evt) : studentActions(evt);
-  let html = '<tr class="hover:bg-slate-50 align-top">';
-  html += '<td class="p-4"><div class="font-semibold text-slate-800">' + esc(evt.name) + '</div>';
-  html += '<div class="text-xs text-slate-500">' + esc(evt.venue || '-') + '</div></td>';
-  html += '<td class="p-4 text-slate-600 text-sm">' + esc(fmtDateTime(evt.start_datetime)) + '</td>';
-  html += '<td class="p-4">' + statusBadge(evt.status) + '</td>';
-  html += '<td class="p-4 text-right space-x-1 whitespace-nowrap">' + actions + '</td></tr>';
+  let html = '<tr class="hover:bg-white/5 transition-colors duration-200 align-middle">';
+  html += '<td class="p-4 w-1/4 align-middle"><div class="font-semibold text-white whitespace-nowrap">' + esc(evt.name) + '</div>';
+  html += '<div class="text-xs text-slate-300">' + esc(evt.venue || '-') + '</div></td>';
+  html += '<td class="p-4 w-1/4 align-middle text-slate-300 text-sm whitespace-nowrap">' + esc(fmtDateTime(evt.start_datetime)) + '</td>';
+  html += '<td class="p-4 w-1/4 align-middle">' + statusBadge(evt.status) + '</td>';
+  html += '<td class="p-4 w-1/4 align-middle text-right whitespace-nowrap">' + actions + '</td></tr>';
   return html;
 }
 
 function manageActions(evt) {
-  const cls = 'px-2.5 py-1 text-xs rounded font-medium ';
-  let html = btn('view', evt.id, 'px-2.5 py-1 text-xs bg-slate-100 text-slate-700 rounded hover:bg-slate-200 font-medium', 'View');
-  html += btn('qr', evt.id, cls + 'bg-purple-50 text-purple-600 hover:bg-purple-100', 'QR', 'fa-qrcode');
-  html += btn('edit', evt.id, cls + 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100', 'Edit');
+  const base = 'px-2.5 py-1 text-xs rounded font-medium transition-all duration-200 ease-in-out hover:scale-[1.03] active:scale-95 ';
+  const isAdmin = profile && profile.role === 'admin';
+  let html = btn('view', evt.id, 'px-2.5 py-1 text-xs bg-indigo-500/20 text-indigo-200 rounded hover:bg-indigo-500/30 font-medium transition-all duration-200 ease-in-out hover:scale-[1.03] active:scale-95', 'View');
+  html += btn('qr', evt.id, base + 'bg-purple-500/20 text-purple-200 hover:bg-purple-500/30', 'QR', 'fa-qrcode');
+  html += btn('edit', evt.id, base + 'bg-indigo-500/20 text-indigo-200 hover:bg-indigo-500/30', 'Edit');
   html += evt.status === 'open'
-    ? btn('close', evt.id, cls + 'bg-amber-50 text-amber-700 hover:bg-amber-100', 'Close')
-    : btn('open', evt.id, cls + 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100', 'Open');
-  html += btn('del', evt.id, cls + 'bg-rose-50 text-rose-600 hover:bg-rose-100', 'Delete');
+    ? btn('close', evt.id, base + 'bg-amber-500/20 text-amber-200 hover:bg-amber-500/30', 'Close')
+    : btn('open', evt.id, base + 'bg-emerald-500/20 text-emerald-200 hover:bg-emerald-500/30', 'Open');
+  // Role-based access control: only administrators can permanently delete events.
+  // Teachers keep View / QR / Edit / Close so attendance data stays protected.
+  if (isAdmin) {
+    html += btn('del', evt.id, base + 'bg-rose-500/20 text-rose-200 hover:bg-rose-500/30', 'Delete');
+  }
   return html;
 }
 
 function studentActions(evt) {
-  return btn('view', evt.id, 'px-2.5 py-1 text-xs bg-slate-100 text-slate-700 rounded hover:bg-slate-200 font-medium', 'View')
-    + btn('checkin', evt.id, 'px-2.5 py-1 text-xs bg-emerald-50 text-emerald-700 rounded hover:bg-emerald-100 font-medium', 'Check in', 'fa-camera');
+  return btn('view', evt.id, 'px-2.5 py-1 text-xs bg-indigo-500/20 text-indigo-200 rounded hover:bg-indigo-500/30 font-medium transition-all duration-200 ease-in-out hover:scale-[1.03] active:scale-95', 'View')
+    + btn('checkin', evt.id, 'px-2.5 py-1 text-xs bg-emerald-500/20 text-emerald-200 rounded hover:bg-emerald-500/30 font-medium transition-all duration-200 ease-in-out hover:scale-[1.03] active:scale-95', 'Check in', 'fa-camera');
 }
 
 /* ---------------- Create / Edit modal ---------------- */

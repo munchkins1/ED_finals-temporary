@@ -53,6 +53,15 @@ function init() {
   // even if Supabase config is missing or the CDN import failed.
   // (index.html also wires a no-import fallback; skip duplicates via dataset.)
   wireTabs();
+  // Sleek animated floating toast: surface a pending logout toast after redirect.
+  try {
+    const pending = localStorage.getItem('campusqr-toast');
+    if (pending) {
+      localStorage.removeItem('campusqr-toast');
+      const { message, type } = JSON.parse(pending);
+      if (message) setTimeout(() => toast(message, type || 'success'), 350);
+    }
+  } catch { /* storage unavailable */ }
   if (loginForm) loginForm.addEventListener('submit', onLogin);
   if (registerForm) registerForm.addEventListener('submit', onRegister);
 
@@ -81,11 +90,15 @@ function init() {
 function showAuthTab(which) {
   const loginTab = document.getElementById('tab-login-btn');
   const regTab = document.getElementById('tab-register-btn');
-  const isLogin = which === 'login';
+  const tabsWrap = document.getElementById('auth-tabs');
+  const isPersonnel = regTab && regTab.style.display === 'none';
+  const isLogin = isPersonnel ? true : which === 'login';
   loginForm?.classList.toggle('hidden', !isLogin);
   registerForm?.classList.toggle('hidden', isLogin);
   msgBox?.classList.add('hidden');
-  if (loginTab) loginTab.className = `py-3 border-b-2 ${isLogin ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-500 hover:text-indigo-600'}`;
+  // Personnel Portal is login-only: keep the hidden Login tab element removed from layout so Welcome back stays clean.
+  if (tabsWrap) tabsWrap.classList.add('hidden');
+  if (loginTab) loginTab.className = 'hidden';
   if (regTab) regTab.className = `py-3 border-b-2 ${!isLogin ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-500 hover:text-indigo-600'}`;
 }
 

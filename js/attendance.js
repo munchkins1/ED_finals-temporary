@@ -55,11 +55,11 @@ export async function renderMyAttendance() {
     return;
   }
   tbody.innerHTML = list.map(r => `
-    <tr class="hover:bg-slate-50">
-      <td class="p-4 font-medium">${esc(r.events?.name || 'Event')}</td>
-      <td class="p-4 text-slate-600">${esc(r.events?.venue || '-')}</td>
-      <td class="p-4">${statusBadge(r.status)}</td>
-      <td class="p-4 text-slate-500 text-sm">${esc(fmtDateTime(r.recorded_at))}</td>
+    <tr class="hover:bg-white/5 transition-colors duration-200 align-middle">
+      <td class="p-4 flex-1 align-middle font-medium text-white">${esc(r.events?.name || 'Event')}</td>
+      <td class="p-4 flex-1 align-middle text-slate-300">${esc(r.events?.venue || '-')}</td>
+      <td class="p-4 flex-1 align-middle">${statusBadge(r.status)}</td>
+      <td class="p-4 flex-1 align-middle text-slate-300 text-sm">${esc(fmtDateTime(r.recorded_at))}</td>
     </tr>`).join('');
 }
 
@@ -137,21 +137,21 @@ export async function renderRecords() {
     const studentNo = r.student?.student_no || r.profiles?.student_no || '';
     const gradeClass = r.student?.grade_class || r.profiles?.grade_class || '';
     return `
-      <tr class="hover:bg-slate-50">
-        <td class="p-4">
-          <div class="font-semibold">${esc(studentName)}</div>
-          <div class="text-xs text-slate-500">${esc(studentNo)} ${esc(gradeClass)}</div>
+      <tr class="hover:bg-white/5 transition-colors duration-200 align-middle">
+        <td class="p-4 w-1/5 align-middle">
+          <div class="font-semibold text-white">${esc(studentName)}</div>
+          <div class="text-xs text-slate-300">${esc(studentNo)} ${esc(gradeClass)}</div>
         </td>
-        <td class="p-4 text-slate-600">${esc(r.events?.name || '-')}</td>
-        <td class="p-4">
+        <td class="p-4 w-1/5 align-middle text-slate-200">${esc(r.events?.name || '-')}</td>
+        <td class="p-4 w-1/5 align-middle">
           ${editable
-            ? `<select data-status="${r.id}" class="text-xs border border-slate-300 rounded px-2 py-1">${opts}</select>`
+            ? `<select data-status="${r.id}" class="text-xs border border-white/20 bg-white/10 text-white rounded px-2 py-1 transition-all duration-200 ease-in-out">${opts}</select>`
             : statusBadge(r.status)}
         </td>
-        <td class="p-4 text-slate-500 text-sm">${esc(fmtDateTime(r.recorded_at))}</td>
-        <td class="p-4 text-right">
+        <td class="p-4 w-1/5 align-middle text-slate-300 text-sm">${esc(fmtDateTime(r.recorded_at))}</td>
+        <td class="p-4 w-1/5 align-middle text-right">
           ${editable
-            ? `<button data-del-record="${r.id}" class="px-2.5 py-1 text-xs bg-rose-50 text-rose-600 rounded hover:bg-rose-100 font-medium">Delete</button>`
+            ? `<button data-del-record="${r.id}" class="px-2.5 py-1 text-xs bg-rose-500/20 text-rose-200 rounded hover:bg-rose-500/30 font-medium transition-all duration-200 ease-in-out hover:scale-[1.03] active:scale-95">Delete</button>`
             : '<span class="text-xs text-slate-400">View only</span>'}
         </td>
       </tr>`;
@@ -164,16 +164,16 @@ function renderRecordsSummary(rows) {
   const counts = { present: 0, late: 0, absent: 0, excused: 0 };
   rows.forEach(r => { counts[r.status] = (counts[r.status] || 0) + 1; });
   const card = (label, val, color) => `
-    <div class="glass rounded-xl p-4 text-center">
-      <div class="text-2xl font-bold ${color}">${val}</div>
-      <div class="text-xs text-slate-500 uppercase font-semibold">${label}</div>
+    <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-4 text-center transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
+      <div class="text-2xl font-bold ${color} text-center">${val}</div>
+      <div class="text-xs text-slate-300 uppercase font-semibold text-center">${label}</div>
     </div>`;
-  box.innerHTML = `<div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
-    ${card('Total', rows.length, 'text-indigo-600')}
-    ${card('Present', counts.present, 'text-emerald-600')}
-    ${card('Late', counts.late, 'text-amber-600')}
-    ${card('Absent', counts.absent, 'text-rose-600')}
-    ${card('Excused', counts.excused, 'text-blue-600')}
+  box.innerHTML = `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    ${card('Total', rows.length, 'text-indigo-200')}
+    ${card('Present', counts.present, 'text-emerald-300')}
+    ${card('Late', counts.late, 'text-amber-300')}
+    ${card('Absent', counts.absent, 'text-rose-300')}
+    ${card('Excused', counts.excused, 'text-blue-300')}
   </div>`;
 }
 

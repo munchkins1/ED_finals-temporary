@@ -71,12 +71,14 @@ export function toast(message, type = 'info', timeout = 3800) {
   const host = ensureToastHost();
   const conf = TOAST[type] || TOAST.info;
   const el = document.createElement('div');
-  el.className = `${conf.bg} text-white rounded-lg shadow-lg px-4 py-3 text-sm flex items-start gap-3 animate-fade-in`;
+  el.className = `${conf.bg} text-white rounded-xl shadow-2xl px-4 py-3 text-sm flex items-start gap-3 transition-all duration-300 toast-float border border-white/20 backdrop-blur-md`;
   el.innerHTML = `<i class="fa-solid ${conf.icon} mt-0.5"></i><span class="flex-1">${esc(message)}</span>`;
   host.appendChild(el);
+  requestAnimationFrame(() => { el.style.transform = 'translateY(0)'; el.style.opacity = '1'; });
   setTimeout(() => {
-    el.style.transition = 'opacity .3s';
+    el.style.transition = 'all .3s ease-in-out';
     el.style.opacity = '0';
+    el.style.transform = 'translateY(-12px) scale(.96)';
     setTimeout(() => el.remove(), 300);
   }, timeout);
 }

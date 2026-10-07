@@ -121,8 +121,8 @@ export async function renderMyRecent() {
     return;
   }
   tbody.innerHTML = data.map(r => `
-    <tr class="hover:bg-slate-50">
-      <td class="p-3 font-medium">${esc(r.events?.name || 'Event')}</td>
-      <td class="p-3 text-right text-xs text-slate-500">${esc(new Date(r.recorded_at).toLocaleString())}</td>
+    <tr class="hover:bg-white/5 transition-colors duration-200 align-middle">
+      <td class="p-3 align-middle font-medium text-white">${esc(r.events?.name || 'Event')}</td>
+      <td class="p-3 align-middle text-right text-xs text-slate-300">${esc(new Date(r.recorded_at).toLocaleString())}</td>
     </tr>`).join('');
 }
