@@ -240,7 +240,7 @@ function renderNav() {
   // Desktop: pill links exactly like the per-role nav designs.
   if (nav) {
     nav.innerHTML = items.map(n =>
-      `<a href="${n.href}" class="nav-btn px-3 py-2 rounded-lg transition flex items-center gap-1.5" data-tab="${n.tab}"><i class="fa-solid ${n.icon}"></i> ${n.label}</a>`
+      `<a href="${n.href}" class="nav-btn px-4 py-2 rounded-full transition flex items-center gap-1.5" data-tab="${n.tab}"><i class="fa-solid ${n.icon}"></i> ${n.label}</a>`
     ).join('');
   }
 

@@ -173,8 +173,8 @@
 <body class="text-white font-sans antialiased min-h-screen flex flex-col" style="background: radial-gradient(ellipse 80% 60% at 50% 30%, #2b2a8f 0%, #1a1865 45%, #0d0c3d 75%, #070724 100%); background-attachment: fixed;">
 
   <header id="app-header" style="display: none;" class="hidden sticky top-0 z-40 glass-dark text-white">
-    <div class="max-w-7xl mx-auto px-4 py-4 flex flex-wrap justify-between items-center gap-3">
-      <div class="flex items-center space-x-3">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between whitespace-nowrap gap-4 overflow-x-auto">
+      <div class="flex items-center gap-4 shrink-0">
         <span class="qr-logo w-11 h-11 rounded-2xl grid place-items-center text-white text-lg" style="background: linear-gradient(135deg, #6366f1 0%, #3b82f6 45%, #f59e0b 100%);">
           <i class="fa-solid fa-qrcode"></i>
         </span>
@@ -182,8 +182,8 @@
           <p class="text-xs text-indigo-200 font-medium tracking-wide">School Event Attendance System</p>
         </div>
       </div>
-      <nav id="main-nav" class="hidden md:flex items-center space-x-2 text-sm font-medium"></nav>
-      <div class="flex items-center gap-3 ml-auto shrink-0">
+      <nav id="main-nav" class="hidden md:flex items-center gap-4 text-sm font-medium shrink-0"></nav>
+      <div class="flex items-center gap-4 shrink-0">
         <div class="hidden sm:flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-3 py-1.5 rounded-full">
           <span id="current-user-name" class="text-white font-semibold text-sm whitespace-nowrap">-</span>
           <span id="current-user-role" class="text-[11px] uppercase tracking-wider text-indigo-200 bg-indigo-500/25 border border-indigo-300/30 px-2 py-0.5 rounded-full whitespace-nowrap">-</span>
@@ -404,21 +404,21 @@
         <p class="text-sm text-slate-300 text-center">Attendance summaries and system activity.</p>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-4 text-center transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
-          <p class="text-xs text-slate-300 uppercase font-semibold text-center">Total check-ins</p>
-          <h3 id="stat-checkins2" class="text-2xl font-bold text-indigo-300 text-center">-</h3>
+        <div class="bg-white/15 backdrop-blur-md border border-white/30 shadow-2xl rounded-3xl p-4 text-center transition-all duration-300 ease-in-out hover:bg-white/25 hover:border-white/40 hover:-translate-y-1">
+          <p class="text-xs text-slate-100 uppercase font-semibold text-center">Total check-ins</p>
+          <h3 id="stat-checkins2" class="text-white font-bold text-2xl text-center">-</h3>
         </div>
-        <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-4 text-center transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
-          <p class="text-xs text-slate-300 uppercase font-semibold text-center">Check-ins today</p>
-          <h3 id="stat-today2" class="text-2xl font-bold text-emerald-300 text-center">-</h3>
+        <div class="bg-white/15 backdrop-blur-md border border-white/30 shadow-2xl rounded-3xl p-4 text-center transition-all duration-300 ease-in-out hover:bg-white/25 hover:border-white/40 hover:-translate-y-1">
+          <p class="text-xs text-slate-100 uppercase font-semibold text-center">Check-ins today</p>
+          <h3 id="stat-today2" class="text-white font-bold text-2xl text-center">-</h3>
         </div>
-        <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-4 text-center transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
-          <p class="text-xs text-slate-300 uppercase font-semibold text-center">Events</p>
-          <h3 id="stat-events2" class="text-2xl font-bold text-amber-300 text-center">-</h3>
+        <div class="bg-white/15 backdrop-blur-md border border-white/30 shadow-2xl rounded-3xl p-4 text-center transition-all duration-300 ease-in-out hover:bg-white/25 hover:border-white/40 hover:-translate-y-1">
+          <p class="text-xs text-slate-100 uppercase font-semibold text-center">Events</p>
+          <h3 id="stat-events2" class="text-white font-bold text-2xl text-center">-</h3>
         </div>
-        <div class="bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl p-4 text-center transition-all duration-300 ease-in-out hover:bg-white/15 hover:border-white/30 hover:-translate-y-1">
-          <p class="text-xs text-slate-300 uppercase font-semibold text-center">Open events</p>
-          <h3 id="stat-open2" class="text-2xl font-bold text-sky-300 text-center">-</h3>
+        <div class="bg-white/15 backdrop-blur-md border border-white/30 shadow-2xl rounded-3xl p-4 text-center transition-all duration-300 ease-in-out hover:bg-white/25 hover:border-white/40 hover:-translate-y-1">
+          <p class="text-xs text-slate-100 uppercase font-semibold text-center">Open events</p>
+          <h3 id="stat-open2" class="text-white font-bold text-2xl text-center">-</h3>
         </div>
       </div>
 
