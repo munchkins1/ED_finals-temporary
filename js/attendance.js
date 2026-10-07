@@ -35,17 +35,17 @@ export async function renderMyAttendance() {
   if (sc) {
     sc.innerHTML = `
       <div class="grid grid-cols-3 gap-3">
-        <div class="bg-indigo-500/15 border border-indigo-400/30 backdrop-blur-md rounded-xl p-4 text-center">
-          <div class="text-2xl font-bold text-indigo-300">${total}</div>
-          <div class="text-xs text-slate-400 uppercase font-semibold">Events attended</div>
+        <div class="bg-white/15 backdrop-blur-md border border-white/30 shadow-2xl rounded-3xl p-4 text-center">
+          <div class="text-white font-bold text-2xl text-center">${total}</div>
+          <div class="text-xs text-slate-100 uppercase font-semibold text-center">Events attended</div>
         </div>
-        <div class="bg-emerald-500/15 border border-emerald-400/30 backdrop-blur-md rounded-xl p-4 text-center">
-          <div class="text-2xl font-bold text-emerald-300">${present}</div>
-          <div class="text-xs text-slate-400 uppercase font-semibold">Present</div>
+        <div class="bg-white/15 backdrop-blur-md border border-white/30 shadow-2xl rounded-3xl p-4 text-center">
+          <div class="text-white font-bold text-2xl text-center">${present}</div>
+          <div class="text-xs text-slate-100 uppercase font-semibold text-center">Present</div>
         </div>
-        <div class="bg-amber-500/15 border border-amber-400/30 backdrop-blur-md rounded-xl p-4 text-center">
-          <div class="text-2xl font-bold text-amber-300">${rate}%</div>
-          <div class="text-xs text-slate-400 uppercase font-semibold">Attendance rate</div>
+        <div class="bg-white/15 backdrop-blur-md border border-white/30 shadow-2xl rounded-3xl p-4 text-center">
+          <div class="text-white font-bold text-2xl text-center">${rate}%</div>
+          <div class="text-xs text-slate-100 uppercase font-semibold text-center">Attendance rate</div>
         </div>
       </div>`;
   }
@@ -170,10 +170,10 @@ function renderRecordsSummary(rows) {
     </div>`;
   box.innerHTML = `<div class="grid grid-cols-4 lg:grid-cols-5 gap-4">
     ${card('Total', rows.length, 'text-white')}
-    ${card('Present', counts.present, 'text-emerald-400')}
-    ${card('Late', counts.late, 'text-amber-400')}
-    ${card('Absent', counts.absent, 'text-rose-400')}
-    ${card('Excused', counts.excused, 'text-slate-300')}
+    ${card('Present', counts.present, 'text-white')}
+    ${card('Late', counts.late, 'text-white')}
+    ${card('Absent', counts.absent, 'text-white')}
+    ${card('Excused', counts.excused, 'text-white')}
   </div>`;
 }
 

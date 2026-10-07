@@ -423,10 +423,10 @@ export async function renderAdminOverview() {
   box.innerHTML = `
     <div class="grid grid-cols-4 lg:grid-cols-5 gap-4 mb-5">
       ${card('Events', events.length, 'text-white')}
-      ${card('Check-ins', attendance.length, 'text-emerald-400')}
-      ${card('Present', totals.present, 'text-emerald-400')}
-      ${card('Late', totals.late, 'text-amber-400')}
-      ${card('Absent', totals.absent, 'text-rose-400')}
+      ${card('Check-ins', attendance.length, 'text-white')}
+      ${card('Present', totals.present, 'text-white')}
+      ${card('Late', totals.late, 'text-white')}
+      ${card('Absent', totals.absent, 'text-white')}
     </div>
     <div class="w-full overflow-x-auto">
       <table class="w-full text-left border-collapse text-sm min-w-[520px]">
@@ -600,10 +600,10 @@ function renderAdminRecordsSummary(rows) {
     </div>`;
   box.innerHTML = `<div class="grid grid-cols-4 lg:grid-cols-5 gap-4">
     ${card('Total', rows.length, 'text-white')}
-    ${card('Present', counts.present, 'text-emerald-400')}
-    ${card('Late', counts.late, 'text-amber-400')}
-    ${card('Absent', counts.absent, 'text-rose-400')}
-    ${card('Excused', counts.excused, 'text-slate-300')}
+    ${card('Present', counts.present, 'text-white')}
+    ${card('Late', counts.late, 'text-white')}
+    ${card('Absent', counts.absent, 'text-white')}
+    ${card('Excused', counts.excused, 'text-white')}
   </div>`;
 }
 

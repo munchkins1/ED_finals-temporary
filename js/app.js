@@ -240,10 +240,10 @@ function renderNav() {
   // Desktop: pill links exactly like the per-role nav designs.
   if (nav) {
     const links = items.map(n =>
-      `<a href="${n.href}" class="nav-btn px-4 py-2 rounded-full transition flex items-center gap-1.5 whitespace-nowrap" data-tab="${n.tab}"><i class="fa-solid ${n.icon}"></i> ${n.label}</a>`
+      `<a href="${n.href}" class="nav-btn px-4 py-2 rounded-full transition flex items-center justify-center gap-1.5 whitespace-nowrap text-center" style="flex:1 1 40%;min-width:170px;max-width:270px" data-tab="${n.tab}"><i class="fa-solid ${n.icon}"></i> ${n.label}</a>`
     );
-    // Admin's five tabs stack as two balanced rows (2 + 3) instead of one line.
-    if (links.length > 4) {
+    // Balanced two-row nav: 4 tabs -> 2+2, 5 tabs -> 2+3. Equal pills line up straight.
+    if (links.length >= 4) {
       links.splice(2, 0, '<span aria-hidden="true" style="flex-basis:100%;height:0;line-height:0;margin:0;padding:0"></span>');
     }
     nav.innerHTML = links.join('');
